@@ -1,0 +1,34 @@
+:root {
+  /* Core Palette — Pure Deep Space Black & Crisp White Typography */
+  --bg-navy: #000000;
+  --bg-navy-deep: #000000;
+  --ink-dark: #FFFFFF;
+  --bg-warm-white: #000000;
+  --bg-white: #07090D;
+  --bg-cool-neutral: #0D1117;
+  --text-muted: #94A3B8;
+  --text-on-dark: #FFFFFF;
+  --text-on-dark-muted: #94A3B8;
+
+  /* Scientific Accents (Restrained High-Contrast on Black) */
+  --accent-blue: #38BDF8;
+  --accent-teal: #2DD4BF;
+  --accent-slate: #94A3B8;
+  --accent-amber: #F59E0B;
+  --accent-danger: #F87171;
+
+  /* Hairlines & Surfaces */
+  --border-light: rgba(255, 255, 255, 0.16);
+  --border-subtle: rgba(255, 255, 255, 0.10);
+  --border-dark: rgba(255, 255, 255, 0.16);
+
+  /* Typography */
+  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Spacing & Radii */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --gutter: clamp(20px, 3vw, 44px);
+}

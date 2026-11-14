@@ -1,0 +1,77 @@
+import type { ScientificSource } from '../types/dataset';
+
+export const SOURCE_REGISTRY: Record<string, ScientificSource> = {
+  copernicus_glo30: {
+    id: 'copernicus_glo30',
+    institution: 'European Space Agency (ESA) / Copernicus Programme',
+    title: 'Copernicus DEM GLO-30 (Global 30 m Digital Surface Model, COG)',
+    url: 'https://doi.org/10.5270/esa-c5d3d65',
+    date: '2022 COG Release (2011–2015 TanDEM-X acquisition)',
+    sourceType: 'DEM Dataset',
+  },
+  usgs_gale_dem: {
+    id: 'usgs_gale_dem',
+    institution: 'USGS Astrogeology Science Center / NASA PDS',
+    title: 'Mars MSL Gale Merged DEM 1m v3 (HRSC + CTX + HiRISE + MOLA)',
+    url: 'https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m',
+    date: '2022-11-09 (v3 Mosaic)',
+    sourceType: 'DEM Dataset',
+  },
+  usgs_gale_hirise: {
+    id: 'usgs_gale_hirise',
+    institution: 'NASA / JPL-Caltech / University of Arizona / USGS Astrogeology',
+    title: 'Mars MSL Gale Merged Orthophoto & HiRISE-LRGB Mosaic COG',
+    url: 'https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm',
+    date: '2022 Mosaic Compilation',
+    sourceType: 'Orbital Mosaic',
+  },
+  azua_bustos_2020: {
+    id: 'azua_bustos_2020',
+    institution: 'Scientific Reports (Nature Portfolio) — Azua-Bustos et al.',
+    title: 'Inhabited subsurface wet smectites in the hyperarid core of the Atacama Desert as an analog for Mars',
+    url: 'https://www.nature.com/articles/s41598-020-76302-z',
+    date: '2020-11-05',
+    sourceType: 'Peer-Reviewed Publication',
+  },
+  nasa_pds_msl: {
+    id: 'nasa_pds_msl',
+    institution: 'NASA Planetary Data System (PDS) Imaging Node',
+    title: 'Mars Science Laboratory (Curiosity) Mission Volumes & Gale Crater Archive',
+    url: 'https://pds-imaging.jpl.nasa.gov/volumes/msl.html',
+    date: '2012–Present (Ongoing)',
+    sourceType: 'Planetary Archive',
+  },
+  nasa_nssdc_factsheets: {
+    id: 'nasa_nssdc_factsheets',
+    institution: 'NASA Goddard Space Flight Center (NSSDCA)',
+    title: 'Planetary Fact Sheets — Earth, Moon, and Mars Bulk Parameters',
+    url: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/',
+    date: '2024 Reference',
+    sourceType: 'Reference Sheet',
+  },
+  usgs_srtm: {
+    id: 'usgs_srtm',
+    institution: 'USGS Earth Resources Observation and Science (EROS) / NASA',
+    title: 'Shuttle Radar Topography Mission (SRTM) Global 1 Arc-Second',
+    url: 'https://www.usgs.gov/centers/eros/science/usgs-eros-archive-digital-elevation-shuttle-radar-topography-mission-srtm',
+    date: '2000 Acquisition',
+    sourceType: 'DEM Dataset',
+  },
+  lro_lola_pds: {
+    id: 'lro_lola_pds',
+    institution: 'NASA Goddard / USGS Astrogeology / PDS Geosciences Node',
+    title: 'Lunar Reconnaissance Orbiter (LRO) LOLA & SLDEM2015 Lunar Topography',
+    url: 'https://astrogeology.usgs.gov/search/map/Moon/LRO/LOLA/Lunar_LRO_LOLA_Global_LDEM_118m_Mar2014',
+    date: '2014–2015',
+    sourceType: 'DEM Dataset',
+  },
+  esri_world_imagery: {
+    id: 'esri_world_imagery',
+    institution: 'Esri / Maxar / Earthstar Geographics',
+    title: 'World Imagery Basemap Tile Service (Yungay Extent)',
+    url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer',
+    date: 'Multi-date commercial mosaic',
+    sourceType: 'Orbital Mosaic',
+  },
+};
+

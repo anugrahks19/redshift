@@ -1,0 +1,13 @@
+{
+    "version":  "0.1.0",
+    "repository":  "https://github.com/iart-ai/webgl-animation-skills",
+    "displayName":  "WebGL Animation Skills",
+    "name":  "webgl-animation-skills",
+    "description":  "WebGL animation skills for AI coding agents — Three.js scenes, GLSL shaders, and particle systems.",
+    "author":  {
+                   "name":  "iart.ai",
+                   "url":  "https://iart.ai"
+               },
+    "homepage":  "https://iart.ai",
+    "license":  "MIT"
+}

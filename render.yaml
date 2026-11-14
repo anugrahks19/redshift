@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: redshift-analog
+    runtime: static
+    buildCommand: npm ci --prefix analog/analog && npm ci --prefix "frontend_two copy" && node scripts/build-site.mjs
+    staticPublishPath: ./frontend_two copy/dist
+    routes:
+      - type: redirect
+        source: /analog
+        destination: /analog/
+      - type: rewrite
+        source: /analog/*
+        destination: /analog/index.html

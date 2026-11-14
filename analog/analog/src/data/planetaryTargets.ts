@@ -1,0 +1,196 @@
+import type { PlanetaryTargetProfile } from '../types/dataset';
+
+export const PLANETARY_TARGETS: Record<'earth' | 'moon' | 'mars', PlanetaryTargetProfile> = {
+  earth: {
+    id: 'earth',
+    name: 'Earth',
+    bodyType: 'Terrestrial Planet (Reference Analog Host)',
+    tagline: 'Active hydrosphere, biosphere, and plate tectonics preserving extreme analog niches',
+    accentColor: '#286A91',
+    summary:
+      'Earth hosts localized hyperarid, volcanic, cryospheric, and subsurface environments whose physical or mineralogical processes parallel conditions on the Moon and Mars—while differing in atmospheric pressure, global biosphere, and geomagnetic shielding.',
+    explorationRelevance:
+      'Provides accessible field sites for testing rover mobility, drilling, biosignature preservation assays, and remote-sensing calibration prior to spaceflight.',
+    geologicalContext:
+      'Plate tectonics and active hydrological cycling dominate global crust, yet rain-shadow hyperarid cores such as the Atacama preserve ancient evaporites, nitrates, and smectite horizons for millions of years.',
+    characteristics: [
+      {
+        id: 'earth-gravity',
+        label: 'Surface Gravity',
+        value: '9.807',
+        unit: 'm/s²',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Mean equatorial/sea-level standard; varies slightly with latitude and elevation.',
+      },
+      {
+        id: 'earth-pressure',
+        label: 'Mean Surface Pressure',
+        value: '1,013.25',
+        unit: 'mbar',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Sea-level mean; Yungay (~1,000 m elevation) experiences ~900 mbar.',
+      },
+      {
+        id: 'earth-temp',
+        label: 'Mean Surface Temperature',
+        value: '15 (288 K)',
+        unit: '°C',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Global mean; hyperarid desert floors swing widely diurnally.',
+      },
+      {
+        id: 'earth-atmo',
+        label: 'Atmospheric Composition',
+        value: '78% N₂, 21% O₂, 0.9% Ar',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Oxidizing, UV-attenuating column unlike Mars CO₂ or Lunar exosphere.',
+      },
+      {
+        id: 'earth-datum',
+        label: 'Elevation Vertical Datum',
+        value: 'EGM2008 Geoid',
+        unit: 'm (orthometric)',
+        kind: 'derived',
+        sourceId: 'copernicus_glo30',
+        limitation: 'Not directly interchangeable with Mars MOLA Areoid or Lunar reference radius.',
+      },
+    ],
+    limitations: [
+      'Ubiquitous terrestrial microbial background complicates sterile life-detection baselines.',
+      'Higher gravity (9.81 m/s²) and 1 bar atmosphere alter dust transport, rover traction, and thermal dissipation.',
+    ],
+    sourceIds: ['nasa_nssdc_factsheets', 'copernicus_glo30'],
+  },
+  moon: {
+    id: 'moon',
+    name: 'Moon',
+    bodyType: 'Planetary Satellite (Airless Regolith World)',
+    tagline: 'Ultra-high vacuum, sharp regolith dust, basaltic maria, and permanently shadowed polar craters',
+    accentColor: '#64748B',
+    summary:
+      'The Moon preserves an ancient impact-gardened silicate crust with negligible atmosphere, extreme diurnal thermal swings, and volatile traps in permanently shadowed polar regions.',
+    explorationRelevance:
+      'Primary target for Artemis human surface operations, ISRU water-ice prospecting, electrostatic dust mitigation, and regolith excavation.',
+    geologicalContext:
+      'Feldspathic highlands (~4.4 Ga) juxtaposed with flood-basalt maria (~3.1–3.9 Ga) and South Pole–Aitken basin crustal exposures.',
+    characteristics: [
+      {
+        id: 'moon-gravity',
+        label: 'Surface Gravity',
+        value: '1.622',
+        unit: 'm/s² (0.165 g)',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Local mascons introduce minor gravity anomalies.',
+      },
+      {
+        id: 'moon-pressure',
+        label: 'Surface Exosphere Pressure',
+        value: '< 10⁻¹¹',
+        unit: 'mbar',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Surface-bounded exosphere; effectively vacuum for aerodynamics and weathering.',
+      },
+      {
+        id: 'moon-temp',
+        label: 'Equatorial Temperature Range',
+        value: '-173 to +127',
+        unit: '°C',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Permanently shadowed polar craters drop below -230 °C (40 K).',
+      },
+      {
+        id: 'moon-regolith',
+        label: 'Surface Regolith Character',
+        value: 'Unweathered angular agglutinates',
+        kind: 'qualitative',
+        sourceId: 'lro_lola_pds',
+        limitation: 'Earth deserts contain rounded aeolian/fluvial grains rather than micrometeorite-welded agglutinates.',
+      },
+      {
+        id: 'moon-dem-status',
+        label: 'Workspace 30 m DEM Status',
+        value: 'Not packaged (LRO LOLA 118 m / NAC pending)',
+        kind: 'qualitative',
+        sourceId: 'lro_lola_pds',
+        limitation: 'No local 3D Lunar DEM raster is bundled in this workspace; Research view marks Moon DEM as Unavailable.',
+      },
+    ],
+    limitations: [
+      'No Earth analog replicates airless micrometeorite gardening and solar-wind implantation.',
+      'Local 3D Lunar DEM subset is not currently ingested in this workspace.',
+    ],
+    sourceIds: ['nasa_nssdc_factsheets', 'lro_lola_pds'],
+  },
+  mars: {
+    id: 'mars',
+    name: 'Mars',
+    bodyType: 'Terrestrial Planet (Cold Hyperarid CO₂ World)',
+    tagline: 'Ancient lacustrine clay basins, ferric dust plains, and 0.38 g rover exploration targets',
+    accentColor: '#C28B38',
+    summary:
+      'Mars combines a thin CO₂ atmosphere (~6.1 mbar) and sub-freezing present climate with orbital and in-situ rover evidence of Noachian–Hesperian liquid water, phyllosilicates, and sulfates.',
+    explorationRelevance:
+      'Central target for astrobiology, ancient habitability, Mars Sample Return, and autonomous surface mobility across craters and layered sedimentary mounds.',
+    geologicalContext:
+      'Gale Crater (~154 km diameter) hosts Aeolis Mons (Mount Sharp), a ~5 km stratigraphic stack transitioning from basal fluvio-lacustrine mudstones (Murray Formation) through hematite-bearing Vera Rubin Ridge and clay-bearing Glen Torridon into sulfate-bearing strata.',
+    characteristics: [
+      {
+        id: 'mars-gravity',
+        label: 'Surface Gravity',
+        value: '3.721',
+        unit: 'm/s² (0.379 g)',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Mean surface gravity; 38% of Earth alters wheel sinkage and angle of repose.',
+      },
+      {
+        id: 'mars-pressure',
+        label: 'Mean Surface Pressure',
+        value: '6.1',
+        unit: 'mbar',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Below triple point of pure water at most elevations; varies seasonally with CO₂ polar condensation.',
+      },
+      {
+        id: 'mars-temp',
+        label: 'Mean Surface Temperature',
+        value: '-63 (210 K)',
+        unit: '°C',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Equatorial noon can briefly exceed 0 °C while night drops below -80 °C.',
+      },
+      {
+        id: 'mars-atmo',
+        label: 'Atmospheric Composition',
+        value: '95.3% CO₂, 2.6% N₂, 1.9% Ar',
+        kind: 'measured',
+        sourceId: 'nasa_nssdc_factsheets',
+        limitation: 'Minimal ozone UV shielding leads to strong surface photolysis and perchlorate oxidation.',
+      },
+      {
+        id: 'mars-datum',
+        label: 'Elevation Vertical Datum',
+        value: 'MOLA Areoid (R = 3,396,190 m)',
+        unit: 'm',
+        kind: 'derived',
+        sourceId: 'usgs_gale_dem',
+        limitation: 'Cannot be directly subtracted from Earth EGM2008 orthometric elevations.',
+      },
+    ],
+    limitations: [
+      'Present surface radiation, perchlorate chemistry, and sub-freezing CO₂ regime have no exact Earth equivalent.',
+      'Merged 1 m DEM coverage is restricted to targeted HRSC/CTX/HiRISE stereo corridors in Gale Crater.',
+    ],
+    sourceIds: ['nasa_nssdc_factsheets', 'usgs_gale_dem', 'nasa_pds_msl'],
+  },
+};
+

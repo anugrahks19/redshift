@@ -1,0 +1,13 @@
+{
+    "description":  "Official GSAP skills — animations, timelines, ScrollTrigger, plugins, utilities, React, and performance",
+    "version":  "1.0.0",
+    "author":  {
+                   "name":  "GreenSock"
+               },
+    "name":  "gsap-skills",
+    "homepage":  "https://gsap.com",
+    "repository":  "https://github.com/greensock/gsap-skills",
+    "logo":  "assets/gsap-green.svg",
+    "license":  "MIT",
+    "displayName":  "GSAP Skills"
+}
