@@ -1,0 +1,60 @@
+{
+  "id": "mars-gale-murray-30m",
+  "siteId": "gale-murray",
+  "planet": "Mars",
+  "siteName": "Gale Crater — Murray Buttes & Vera Rubin Ridge",
+  "crs": "Mars_Equirectangular_clon0 (IAU Mars 2000 Sphere, R = 3,396,190 m)",
+  "nativeCrs": "Mars_Equirectangular_clon0 (Planetocentric Lat, Positive East Lon)",
+  "verticalDatum": "MOLA Areoid reference equipotential surface (meters)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      8141500,
+      -282340,
+      8145340,
+      -278500
+    ],
+    "geographic": [
+      137.35203,
+      -4.76325,
+      137.41681,
+      -4.69846
+    ],
+    "center": {
+      "lat": -4.7309,
+      "lon": 137.3844,
+      "label": "4.7309°S, 137.3844°E (Planetocentric)"
+    },
+    "fullMosaicProjected": [
+      8127993.99,
+      -302221.58,
+      8160973.99,
+      -244781.58
+    ]
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": -4372.23,
+    "maxElevation": -3733.56,
+    "reliefMeters": 638.67
+  },
+  "provenance": {
+    "datasetName": "Mars MSL Gale Merged DEM 1m v3",
+    "provider": "USGS Astrogeology Science Center / NASA PDS",
+    "instrumentOrMission": "MRO HiRISE + CTX + Mars Express HRSC + MGS MOLA reference",
+    "originalUrl": "https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m",
+    "cogUrl": "https://planetarymaps.usgs.gov/mosaic/Mars/MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif",
+    "productId": "MSL_Gale_DEM_Mosaic_1m_v3",
+    "acquisitionRange": "Multi-mission MRO/MEX/MGS compilation (v3 release Nov 2022)",
+    "processingPerformed": "Bounded 3.84 km x 3.84 km subset (x: 8141500..8145340, y: -282340..-278500) downsampled from 1.0 m native grid to 30.0 m common analysis grid.",
+    "resamplingMethod": "Stratified block-mean aggregation (2 x 30 = 60 native 1 m samples averaged per 30 m cell)",
+    "limitations": "Downsampling from 1 m to 30 m removes meter-scale rover hazards and boulders while aligning spatial support with Copernicus GLO-30; vertical heights are relative to MOLA Areoid, not Earth EGM2008."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

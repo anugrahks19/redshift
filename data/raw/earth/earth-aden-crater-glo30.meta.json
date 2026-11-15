@@ -1,0 +1,54 @@
+{
+  "id": "earth-aden-crater-glo30",
+  "siteId": "aden-crater",
+  "planet": "Earth",
+  "siteName": "Aden Crater, New Mexico",
+  "crs": "EPSG:32613 (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      311675,
+      3548979,
+      315515,
+      3552819
+    ],
+    "geographic": [
+      -106.9957,
+      32.06137,
+      -106.95429,
+      32.09663
+    ],
+    "center": {
+      "lat": 32.079,
+      "lon": -106.975,
+      "label": "32.079°, -106.975°"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 1281.14,
+    "maxElevation": 1301.35,
+    "reliefMeters": 20.21
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30",
+    "provider": "ESA / Copernicus Open Data Registry",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N32_00_W107_00_DEM/Copernicus_DSM_COG_10_N32_00_W107_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N32_00_W107_00_DEM/Copernicus_DSM_COG_10_N32_00_W107_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_N32_00_W107_00_DEM",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_N32_00_W107_00_DEM and bilinearly resampled onto 30.0 m EPSG:32613 grid. NASADEM coverage check: Copernicus surface model. Vegetation and structures may affect heights..",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "Copernicus surface model. Vegetation and structures may affect heights."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

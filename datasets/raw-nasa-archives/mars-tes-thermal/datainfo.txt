@@ -1,0 +1,43 @@
+PDS_VERSION_ID                     = PDS3
+RECORD_TYPE                        = STREAM
+OBJECT                             = TEXT
+  PUBLICATION_DATE                 = 2009-09-02
+  NOTE                             = "Description of the DATA
+     directory contents for a MGS TES-derived thermal inertia archive 
+     volume."
+END_OBJECT                         = TEXT
+END
+
+
+                              CATALOG Directory Contents
+
+     The DATA directory contains the derived thermal inertia map data products for 
+this archive. File names for thermal inertia maps are of the form global_ti_xxx_2007.img 
+and interpolation masks are of the form global_ti_msk_xxx_2007.img where xxx is either 
+"day" or "night" indicating dayside and nightside maps interpolation masks, respectively.  
+The detached PDS label files use the same naming convention with .LBL instead of the .IMG 
+of the image file. The following files are found in this directory.
+
+DATAINFO.TXT -                  The file you are reading.
+
+global_ti_day_2007.img -        This image contains daytime TES-derived thermal inertia.
+
+global_ti_day_2007.lbl -        detached label file describing global_ti_day_2007.img
+
+global_ti_msk_day_2007.img -    This image is an interpolation mask where a value of "0" 
+                                indicates those pixels where global_ti_day_2007.img has been 
+                                infilled by interpolation.
+
+global_ti_msk_day_2007.lbl -    detached label file describing global_ti_msk_day_2006.img
+
+global_ti_night_2007.img -      This image contains nighttime TES-derived thermal inertia.
+
+
+global_ti_night_2007.lbl -      detached label file describing global_ti_night_2007.img
+
+global_ti_msk_night_2007.img -  This image is an interpolation mask where a value of "0" 
+                                indicates those pixels where global_ti_day_2007.img has been 
+                                infilled by interpolation.
+
+global_ti_msk_night_2007.lbl -  detached label file describing global_ti_msk_night_2006.img
+

@@ -1,0 +1,54 @@
+{
+  "id": "earth-lofoten-glo30",
+  "siteId": "lofoten",
+  "planet": "Earth",
+  "siteName": "Lofoten, Norway",
+  "crs": "EPSG:32633 (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      479861,
+      7565538,
+      483701,
+      7569378
+    ],
+    "geographic": [
+      14.51327,
+      68.20264999999999,
+      14.60667,
+      68.23734
+    ],
+    "center": {
+      "lat": 68.22,
+      "lon": 14.56,
+      "label": "68.22°, 14.56°"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": -0.68,
+    "maxElevation": 149.66,
+    "reliefMeters": 150.34
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30",
+    "provider": "ESA / Copernicus Open Data Registry",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N68_00_E014_00_DEM/Copernicus_DSM_COG_10_N68_00_E014_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N68_00_E014_00_DEM/Copernicus_DSM_COG_10_N68_00_E014_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_N68_00_E014_00_DEM",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_N68_00_E014_00_DEM and bilinearly resampled onto 30.0 m EPSG:32633 grid. NASADEM coverage check: Copernicus surface model. Vegetation and structures may affect heights..",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "Copernicus surface model. Vegetation and structures may affect heights."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

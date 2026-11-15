@@ -1,0 +1,106 @@
+{
+  "body": "Moon",
+  "classification": "Planetary Satellite (Target Destination — Mission 2 Lunar South Pole)",
+  "dataOriginNotice": "Published planetary reference values from NASA NSSDCA Moon Fact Sheet, combined with measured LRO Diviner Polar Cumulative Products (PCP) bolometric temperatures at the Lunar South Pole.",
+  "gravity_m_s2": 1.622,
+  "gravityRelativeToEarth": 0.16539796974501997,
+  "surfacePressure_mbar": 3e-12,
+  "pressureCategory": "Hard surface-bounded exosphere (ultra-high vacuum, ~3 × 10⁻¹² mbar) — requires full pressure suit.",
+  "atmosphereComposition": [
+    {
+      "gas": "Argon-40, Helium-4, Neon-20 (Exospheric trace)",
+      "percent": 100
+    },
+    {
+      "gas": "Oxygen (O₂)",
+      "percent": 0
+    }
+  ],
+  "oxygenPercent": 0,
+  "breathableByHumans": false,
+  "referenceTemperatureCelsius": {
+    "shackletonPsrMeasuredDivinerMinCelsius": -231.43,
+    "shackletonPsrMeasuredDivinerMinKelvin": 41.72,
+    "shackletonRidgeMeasuredDivinerMaxCelsius": -49.29,
+    "shackletonRidgeMeasuredDivinerMaxKelvin": 223.86,
+    "shackletonMeasuredDivinerMeanCelsius": -195.88,
+    "shackletonMeasuredDivinerMeanKelvin": 77.27,
+    "equatorialDayMaxReferenceCelsius": 120,
+    "note": "South Polar values are directly measured by LRO Diviner PCP (PCP_AVG_TBOL_POLS_SUM_LTIM01_240). Non-polar regions do not have local Diviner PCP rasters in this bundle."
+  },
+  "radiationEnvironment": "No atmosphere and no global magnetic field; ~110–380 mSv/yr GCR exposure plus unattenuated solar flare protons (LRO CRaTER).",
+  "humanSafetyWarnings": [
+    "The lunar exosphere provides negligible pressure and oxygen for humans. A pressurized life-support environment is required."
+  ],
+  "sourceCitation": "NASA NSSDCA Moon Fact Sheet + LRO Diviner PCP (UCLA/PDS) + LRO LOLA GDR (NASA GSFC/MIT).",
+  "missingPermanentBaseCriteria": [
+    {
+      "criterion": "Atmospheric Composition & In-Situ Breathability",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "MSL-M-SAM-5-RDR-L2-V1.0",
+        "MSL-M-REMS-2-EDR-V1.0",
+        "LRO-LADEE-EXOSPHERE"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Ionizing Radiation & Solar Particle Event (SPE) Dosimetry",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LOLA-4-GDR-V1.0 (SKYV_65S_240M.IMG)",
+        "LRO-CRaTER-L2",
+        "MSL-M-RAD-2-EDR-V1.0"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Bulk Subsurface Water/Ice Concentration & Purity",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LEND-4/5-RDR-V1.0 (LEND_RDR_DLD)",
+        "LRO-L-LOLA-4-GDR-V1.0 (LPSR_85S_060M)",
+        "MSL-M-DAN-3/4-RDR-V1.0 (SOL0003/SOL0021)"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Continuous Solar Illumination Horizon & Eclipse Duration",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LOLA-4-GDR-V1.0 (AVGVISIB_85S_060M_201608.IMG)"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Direct-to-Earth (DTE) & Relay Communications Visibility",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LOLA-4-GDR-V1.0 (AVGVISIB_85S_060M_201608_EARTH.IMG)",
+        "NASA-DSN-MRO-TGO-RELAY"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Geotechnical Bearing Capacity & Regolith Mechanics",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-DLRE-5-GDR-V1.0 (DGDR_RA_AVG_CYL)",
+        "MGS-M-TES-5-TIMAP-V1.0 (GLOBAL_TI_NIGHT_2007)"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    }
+  ]
+}

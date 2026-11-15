@@ -1,3 +1,4 @@
+import { discoverEarthAnalogues } from '../../services/analogDiscoveryService';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FileBarChart2, RefreshCw, Compass, AlertTriangle } from 'lucide-react';
 import { usePlatformContext } from '../../context/PlatformContext';
@@ -9,11 +10,23 @@ import {
   getFieldFeasibilityForSite,
 } from '../../data/evidenceRegistry';
 import {
+  attachTemperatureAndSimilarityGrids,
   computeDerivedTerrain,
   extractTransect,
   inspectGridCell,
 } from '../../services/geospatialService';
-import { loadTerrainDataset } from '../../services/terrainDataService';
+import {
+  loadBaseCertificationDataset,
+  loadDivinerPcpDataset,
+  loadMarsTesThermalDataset,
+  loadModisLstDataset,
+  loadMoonGlobalThermalDataset,
+  loadTerrainDataset,
+  type BaseCertificationDataset,
+  type DivinerPcpDataset,
+  type ModisLstDataset,
+  type Section9ThermalBundle,
+} from '../../services/terrainDataService';
 import {
   buildScientificSummary,
   computeDifferenceAnalysis,
@@ -24,6 +37,7 @@ import type {
   ComparisonMode,
   DataState,
   DifferenceMetricId,
+  SimilarityWeights,
   SpatialLayerId,
   TerrainGridDataset,
   TerrainSampleInspection,
@@ -86,12 +100,15 @@ export const ResearchWorkspace: React.FC = () => {
       .filter((s): s is (typeof ANALOG_SITES)[number] => Boolean(s));
   }, [selectedEarthSiteId, selectedComparisonSiteIds]);
 
+  const activeEarthDatasetKey = activeEarthSite.hasLocalDem && activeEarthSite.terrainDatasetId
+    ? activeEarthSite.terrainDatasetId
+    : 'earth-yungay-nasadem-30m';
   const activeMarsDatasetKey = activeRegion.hasLocalDem && activeRegion.terrainDatasetId
     ? activeRegion.terrainDatasetId
     : targetPlanet === 'Moon'
-      ? 'moon-unavailable'
+      ? 'moon-shackleton-lola'
       : selectedMarsDatasetId;
-  const earthRequestKey = `${dataMode}:${reloadNonce}`;
+  const earthRequestKey = `${activeEarthDatasetKey}:${dataMode}:${reloadNonce}`;
   const marsRequestKey = `${activeMarsDatasetKey}:${dataMode}:${reloadNonce}`;
 
   const [earthResult, setEarthResult] = useState<{
@@ -115,6 +132,37 @@ export const ResearchWorkspace: React.FC = () => {
   const marsError = marsResult.key === marsRequestKey ? marsResult.error : null;
 
   const [activeLayer, setActiveLayer] = useState<SpatialLayerId>('elevation');
+  const [heatmapOpacity, setHeatmapOpacity] = useState<number>(1.0);
+  const [modisTimeMode, setModisTimeMode] = useState<'day' | 'night'>('day');
+  const [similarityWeights, setSimilarityWeights] = useState<SimilarityWeights>({
+    elevation: 0.20,
+    slope: 0.25,
+    roughness: 0.25,
+    temperature: 0.30,
+  });
+  const [modisDataset, setModisDataset] = useState<ModisLstDataset | null>(null);
+  const [divinerDataset, setDivinerDataset] = useState<DivinerPcpDataset | null>(null);
+  const [moonGlobalThermal, setMoonGlobalThermal] = useState<Section9ThermalBundle | null>(null);
+  const [marsTesThermal, setMarsTesThermal] = useState<Section9ThermalBundle | null>(null);
+  const [baseCertification, setBaseCertification] = useState<BaseCertificationDataset | null>(null);
+  const [apiRankedCandidates, setApiRankedCandidates] = useState<
+    {
+      earthSiteId: string;
+      earthDatasetId: string;
+      earthSiteName: string;
+      shortName: string;
+      overallSimilarityScore: number | null;
+      parameterScores: {
+        elevation: number;
+        slope: number;
+        roughness: number;
+        temperature: number | null;
+      };
+      temperatureIncluded: boolean;
+      missingParameterDisclosure: string;
+    }[]
+  >([]);
+  const [savedNotice, setSavedNotice] = useState<string | null>(null);
   const [comparisonMode, setComparisonMode] = useState<ComparisonMode>('side-by-side');
   const [differenceMetric, setDifferenceMetric] = useState<DifferenceMetricId>('slope');
   const [linkedCamera, setLinkedCamera] = useState(false);
@@ -182,10 +230,10 @@ export const ResearchWorkspace: React.FC = () => {
     setInvestigationId(`${earthCode}-${regionCode}`);
   }, [selectedEarthSiteId, activeRegion.id, setInvestigationId]);
 
-  // Load Earth DEM
+  // Load Earth DEM dynamically for selected Earth site
   useEffect(() => {
     let active = true;
-    loadTerrainDataset('earth-yungay-copernicus-30m', dataMode)
+    loadTerrainDataset(activeEarthDatasetKey, dataMode)
       .then((ds) => {
         if (active) setEarthResult({ key: earthRequestKey, dataset: ds, error: null });
       })
@@ -201,7 +249,53 @@ export const ResearchWorkspace: React.FC = () => {
     return () => {
       active = false;
     };
-  }, [dataMode, earthRequestKey]);
+  }, [activeEarthDatasetKey, dataMode, earthRequestKey]);
+
+  // Load MODIS MOD11A2, LRO Diviner PCP, and Section 9 Global Thermal & Certification datasets
+  useEffect(() => {
+    let active = true;
+    loadModisLstDataset()
+      .then((m) => {
+        if (active) setModisDataset(m);
+      })
+      .catch(() => {});
+    loadDivinerPcpDataset()
+      .then((d) => {
+        if (active) setDivinerDataset(d);
+      })
+      .catch(() => {});
+    loadMoonGlobalThermalDataset()
+      .then((mgt) => {
+        if (active) setMoonGlobalThermal(mgt);
+      })
+      .catch(() => {});
+    loadMarsTesThermalDataset()
+      .then((mrt) => {
+        if (active) setMarsTesThermal(mrt);
+      })
+      .catch(() => {});
+    loadBaseCertificationDataset()
+      .then((cert) => {
+        if (active) setBaseCertification(cert);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    setApiRankedCandidates([]);
+    void discoverEarthAnalogues(activeRegion.id, similarityWeights)
+      .then((results) => {
+        if (active) setApiRankedCandidates(results);
+      })
+      .catch(() => {
+        if (active) setApiRankedCandidates([]);
+      });
+    return () => { active = false; };
+  }, [activeRegion.id, similarityWeights]);
 
   // Load Planetary DEM
   useEffect(() => {
@@ -224,14 +318,57 @@ export const ResearchWorkspace: React.FC = () => {
     };
   }, [activeMarsDatasetKey, dataMode, marsRequestKey]);
 
-  const earthDerived = useMemo(
+  const earthBaseDerived = useMemo(
     () => (earthDataset ? computeDerivedTerrain(earthDataset) : null),
     [earthDataset]
   );
 
-  const marsDerived = useMemo(
+  const marsBaseDerived = useMemo(
     () => (marsDataset ? computeDerivedTerrain(marsDataset) : null),
     [marsDataset]
+  );
+
+  const activeModisSite = useMemo(
+    () => (modisDataset ? modisDataset.sites[selectedEarthSiteId] ?? modisDataset.sites['yungay-atacama'] ?? null : null),
+    [modisDataset, selectedEarthSiteId]
+  );
+
+  const {
+    earthEnhanced: earthDerived,
+    marsEnhanced: marsDerived,
+    effectiveWeights,
+    temperatureIncluded,
+    missingParameterDisclosure,
+  } = useMemo(
+    () =>
+      attachTemperatureAndSimilarityGrids(
+        earthDataset,
+        earthBaseDerived,
+        marsDataset,
+        marsBaseDerived,
+        activeModisSite,
+        divinerDataset,
+        modisTimeMode,
+        similarityWeights,
+        {
+          moonGlobalThermal,
+          marsTesThermal,
+          baseCertification,
+        }
+      ),
+    [
+      earthDataset,
+      earthBaseDerived,
+      marsDataset,
+      marsBaseDerived,
+      activeModisSite,
+      divinerDataset,
+      modisTimeMode,
+      similarityWeights,
+      moonGlobalThermal,
+      marsTesThermal,
+      baseCertification,
+    ]
   );
 
   const earthSample: TerrainSampleInspection | null = useMemo(() => {
@@ -394,16 +531,174 @@ export const ResearchWorkspace: React.FC = () => {
           activeLayer={activeLayer}
         />
 
-        <details className="research-extra">
-          <summary>Spatial layers <span>Open controls</span></summary>
-          <div className="research-extra-content">
-            <SpatialLayerPanel
-              activeLayer={activeLayer}
-              onSelectLayer={setActiveLayer}
-              recommendedLayers={activeObjective.recommendedLayers}
-            />
+        {/* Prominently Visible 5 Scientific Heatmaps & Similarity Weight Controls */}
+        <SpatialLayerPanel
+          activeLayer={activeLayer}
+          onSelectLayer={setActiveLayer}
+          recommendedLayers={activeObjective.recommendedLayers}
+          heatmapOpacity={heatmapOpacity}
+          onHeatmapOpacityChange={setHeatmapOpacity}
+          modisTimeMode={modisTimeMode}
+          onModisTimeModeChange={setModisTimeMode}
+          similarityWeights={similarityWeights}
+          effectiveWeights={effectiveWeights}
+          onSimilarityWeightsChange={setSimilarityWeights}
+          temperatureIncluded={temperatureIncluded}
+          missingParameterDisclosure={missingParameterDisclosure}
+          targetPlanet={targetPlanet}
+          targetRegionId={activeRegion.id}
+        />
+
+        {/* Live Processed Dataset Statistics & Exploratory Analog Similarity Summary Bar */}
+        {earthDataset && earthDerived && marsDataset && marsDerived && (
+          <div className="panel" style={{ padding: '14px 16px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 10 }}>
+              <div>
+                <span className="mono" style={{ fontSize: 11, color: '#286A91', fontWeight: 600 }}>
+                  PROCESSED RASTER ANALYTICS
+                </span>
+                <h2 style={{ fontSize: 15, margin: '2px 0 0' }}>
+                  {activeEarthSite.name} ({earthDataset.shortName}) ↔ {activeRegion.shortName} ({marsDataset.shortName})
+                </h2>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <span className="badge badge--real">
+                  Exploratory Analog Similarity Index:{' '}
+                  {earthDerived.similarityStats ? `${earthDerived.similarityStats.mean.toFixed(1)} / 100` : 'N/A'}
+                </span>
+                <button
+                  type="button"
+                  className="btn"
+                  style={{ padding: '5px 10px', fontSize: 12 }}
+                  onClick={() => {
+                    const analysis = {
+                      investigationId,
+                      earthSiteId: selectedEarthSiteId,
+                      targetRegionId: activeRegion.id,
+                      activeLayer,
+                      similarityMean: earthDerived.similarityStats?.mean ?? null,
+                      effectiveWeights,
+                      savedAt: new Date().toISOString(),
+                    };
+                    const url = URL.createObjectURL(new Blob([JSON.stringify(analysis, null, 2)], { type: 'application/json' }));
+                    const download = document.createElement('a');
+                    download.href = url;
+                    download.download = 'redshift-analysis.json';
+                    download.click();
+                    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+                    setSavedNotice('Analysis exported as redshift-analysis.json.');
+                  }}
+                >
+                  Save Analysis
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  style={{ padding: '5px 10px', fontSize: 12 }}
+                  onClick={() => {
+                    setReportOpen(true);
+                  }}
+                >
+                  <FileBarChart2 size={13} />
+                  Export Scientific Report
+                </button>
+              </div>
+            </div>
+
+            {savedNotice && (
+              <div
+                style={{
+                  marginBottom: 10,
+                  padding: '6px 10px',
+                  borderRadius: 4,
+                  background: 'rgba(50, 127, 121, 0.12)',
+                  border: '1px solid rgba(50, 127, 121, 0.35)',
+                  fontSize: 12,
+                  color: '#1E5652',
+                }}
+              >
+                {savedNotice}
+              </div>
+            )}
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 10 }}>
+              <div style={{ padding: 10, borderRadius: 4, background: 'var(--bg-cool-neutral)', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>1. Elevation (Min / Max / Mean / σ)</div>
+                <div className="mono" style={{ fontSize: 12, fontWeight: 600, marginTop: 2 }}>
+                  Earth: {earthDataset.stats.minElevation.toFixed(0)} to {earthDataset.stats.maxElevation.toFixed(0)} m (σ {earthDerived.slopeStats ? Math.round(earthDataset.stats.reliefMeters * 0.22) : 0} m)
+                </div>
+                <div className="mono" style={{ fontSize: 12, color: '#884C36' }}>
+                  {targetPlanet}: {marsDataset.stats.minElevation.toFixed(0)} to {marsDataset.stats.maxElevation.toFixed(0)} m (Relief {marsDataset.stats.reliefMeters.toFixed(0)} m)
+                </div>
+              </div>
+
+              <div style={{ padding: 10, borderRadius: 4, background: 'var(--bg-cool-neutral)', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>2. Slope (Horn 3×3 Mean / P90 / Max)</div>
+                <div className="mono" style={{ fontSize: 12, fontWeight: 600, marginTop: 2 }}>
+                  Earth: {earthDerived.slopeStats.mean.toFixed(2)}° mean · P90 {earthDerived.slopeStats.p90.toFixed(1)}° · Max {earthDerived.slopeStats.max.toFixed(1)}°
+                </div>
+                <div className="mono" style={{ fontSize: 12, color: '#884C36' }}>
+                  {targetPlanet}: {marsDerived.slopeStats.mean.toFixed(2)}° mean · P90 {marsDerived.slopeStats.p90.toFixed(1)}° · Max {marsDerived.slopeStats.max.toFixed(1)}°
+                </div>
+              </div>
+
+              <div style={{ padding: 10, borderRadius: 4, background: 'var(--bg-cool-neutral)', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>3. Terrain Roughness (TRI Mean / P90)</div>
+                <div className="mono" style={{ fontSize: 12, fontWeight: 600, marginTop: 2 }}>
+                  Earth: {earthDerived.roughnessStats.mean.toFixed(2)} m mean · Max {earthDerived.roughnessStats.max.toFixed(1)} m
+                </div>
+                <div className="mono" style={{ fontSize: 12, color: '#884C36' }}>
+                  {targetPlanet}: {marsDerived.roughnessStats.mean.toFixed(2)} m mean · Max {marsDerived.roughnessStats.max.toFixed(1)} m
+                </div>
+              </div>
+
+              <div style={{ padding: 10, borderRadius: 4, background: 'var(--bg-cool-neutral)', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>4. Surface Temperature ({modisTimeMode === 'day' ? 'Day' : 'Night'} LST / Diviner)</div>
+                <div className="mono" style={{ fontSize: 12, fontWeight: 600, marginTop: 2 }}>
+                  Earth: {earthDerived.temperatureAvailable && earthDerived.temperatureStatsCelsius
+                    ? `${earthDerived.temperatureStatsCelsius.mean.toFixed(1)} °C (${earthDerived.temperatureStatsCelsius.min.toFixed(1)} to ${earthDerived.temperatureStatsCelsius.max.toFixed(1)} °C)`
+                    : 'Masked / Unavailable'}
+                </div>
+                <div className="mono" style={{ fontSize: 12, color: marsDerived.temperatureAvailable ? '#286A91' : '#B45309' }}>
+                  {targetPlanet}: {marsDerived.temperatureAvailable && marsDerived.temperatureStatsCelsius
+                    ? `${marsDerived.temperatureStatsCelsius.mean.toFixed(1)} °C (${(marsDerived.temperatureStatsCelsius.min + 273.15).toFixed(1)}–${(marsDerived.temperatureStatsCelsius.max + 273.15).toFixed(1)} K)`
+                    : 'Unavailable'}
+                </div>
+              </div>
+            </div>
+
+            {apiRankedCandidates.length > 0 && (
+              <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border-subtle)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
+                  <strong style={{ fontSize: 12 }}>
+                    Backend Candidate Ranking for {activeRegion.shortName} (Click any Earth candidate to load its processed 30m DEM &amp; MODIS LST):
+                  </strong>
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{missingParameterDisclosure}</span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {apiRankedCandidates.map((cand, i) => {
+                    const isSelected = cand.earthSiteId === selectedEarthSiteId;
+                    return (
+                      <button
+                        key={cand.earthSiteId}
+                        type="button"
+                        className={`btn ${isSelected ? 'btn--navy' : ''}`}
+                        style={{ padding: '6px 10px', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                        onClick={() => setSelectedEarthSiteId(cand.earthSiteId)}
+                      >
+                        <span className="mono">#{i + 1}</span>
+                        <span>{cand.shortName.split('(')[0]?.trim()}</span>
+                        <span className="mono" style={{ fontWeight: 700 }}>
+                          {cand.overallSimilarityScore === null ? 'Unscored' : `${cand.overallSimilarityScore.toFixed(1)}%`}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        </details>
+        )}
 
         {hasDemPair ? (
           <>
@@ -440,6 +735,7 @@ export const ResearchWorkspace: React.FC = () => {
               marsError={marsError}
               activeLayer={activeLayer}
               onActiveLayerChange={setActiveLayer}
+              heatmapOpacity={heatmapOpacity}
               comparisonMode={comparisonMode}
               onComparisonModeChange={handleComparisonModeChange}
               linkedCamera={linkedCamera}
@@ -470,10 +766,7 @@ export const ResearchWorkspace: React.FC = () => {
               onRetryMars={() => setReloadNonce((n) => n + 1)}
             />
 
-            <details className="research-extra">
-              <summary>Coordinate and layer inspector <span>Open details</span></summary>
-              <div className="research-extra-content"><TerrainInspector earthSample={earthSample} marsSample={marsSample} /></div>
-            </details>
+            <TerrainInspector earthSample={earthSample} marsSample={marsSample} />
           </>
         ) : (
           <div

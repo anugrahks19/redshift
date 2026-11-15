@@ -1,0 +1,60 @@
+{
+  "id": "mars-gale-bradbury-30m",
+  "siteId": "gale-bradbury",
+  "planet": "Mars",
+  "siteName": "Gale Crater — Bradbury Landing & Aeolis Palus",
+  "crs": "Mars_Equirectangular_clon0 (IAU Mars 2000 Sphere, R = 3,396,190 m)",
+  "nativeCrs": "Mars_Equirectangular_clon0 (Planetocentric Lat, Positive East Lon)",
+  "verticalDatum": "MOLA Areoid reference equipotential surface (meters)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      8144000,
+      -274840,
+      8147840,
+      -271000
+    ],
+    "geographic": [
+      137.39421,
+      -4.63672,
+      137.45899,
+      -4.57193
+    ],
+    "center": {
+      "lat": -4.6043,
+      "lon": 137.4266,
+      "label": "4.6043°S, 137.4266°E (Planetocentric)"
+    },
+    "fullMosaicProjected": [
+      8127993.99,
+      -302221.58,
+      8160973.99,
+      -244781.58
+    ]
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": -4528.97,
+    "maxElevation": -4470.84,
+    "reliefMeters": 58.13
+  },
+  "provenance": {
+    "datasetName": "Mars MSL Gale Merged DEM 1m v3",
+    "provider": "USGS Astrogeology Science Center / NASA PDS",
+    "instrumentOrMission": "MRO HiRISE + CTX + Mars Express HRSC + MGS MOLA reference",
+    "originalUrl": "https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m",
+    "cogUrl": "https://planetarymaps.usgs.gov/mosaic/Mars/MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif",
+    "productId": "MSL_Gale_DEM_Mosaic_1m_v3",
+    "acquisitionRange": "Multi-mission MRO/MEX/MGS compilation (v3 release Nov 2022)",
+    "processingPerformed": "Bounded 3.84 km x 3.84 km subset (x: 8144000..8147840, y: -274840..-271000) downsampled from 1.0 m native grid to 30.0 m common analysis grid.",
+    "resamplingMethod": "Stratified block-mean aggregation (2 x 30 = 60 native 1 m samples averaged per 30 m cell)",
+    "limitations": "Low-relief alluvial plains (~65 m total relief); 30 m resampling smooths meter-scale aeolian ripples and Curiosity traverse tracks."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

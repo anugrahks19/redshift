@@ -1,0 +1,54 @@
+{
+  "id": "earth-lake-salda-glo30",
+  "siteId": "lake-salda",
+  "planet": "Earth",
+  "siteName": "Lake Salda, Türkiye",
+  "crs": "EPSG:32635 (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      732179,
+      4157269,
+      736019,
+      4161109
+    ],
+    "geographic": [
+      29.62768,
+      37.53222,
+      29.672330000000002,
+      37.567769999999996
+    ],
+    "center": {
+      "lat": 37.55,
+      "lon": 29.65,
+      "label": "37.55°, 29.65°"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 1135.5,
+    "maxElevation": 1438.8,
+    "reliefMeters": 303.3
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30",
+    "provider": "ESA / Copernicus Open Data Registry",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N37_00_E029_00_DEM/Copernicus_DSM_COG_10_N37_00_E029_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N37_00_E029_00_DEM/Copernicus_DSM_COG_10_N37_00_E029_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_N37_00_E029_00_DEM",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_N37_00_E029_00_DEM and bilinearly resampled onto 30.0 m EPSG:32635 grid. NASADEM coverage check: Copernicus surface model. Vegetation and structures may affect heights..",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "Copernicus surface model. Vegetation and structures may affect heights."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

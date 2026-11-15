@@ -13,7 +13,7 @@ export const TopNav: React.FC = () => (
         <NavLink to="/" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Overview</NavLink>
         <NavLink to="/explore" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Explore</NavLink>
         <NavLink to="/research" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Research</NavLink>
-        <NavLink to="/learn" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Learn</NavLink>
+        <NavLink to="/learn" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>TERRAFORM</NavLink>
       </nav>
     </div>
   </header>

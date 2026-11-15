@@ -1,0 +1,54 @@
+{
+  "id": "moon-tranquillitatis-lola",
+  "siteId": "mare-tranquillitatis",
+  "planet": "Moon",
+  "siteName": "Mare Tranquillitatis — Ilmenite Basalt Plain (LRO LOLA LDEM_64)",
+  "crs": "Simple Cylindrical Moon_2000 (MEAN EARTH/POLAR AXIS OF DE421)",
+  "nativeCrs": "SIMPLE CYLINDRICAL 64 pix/deg (LDEM_64)",
+  "verticalDatum": "Lunar Reference Sphere R = 1,737,400 m (GRGM 900C)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 473.8,
+  "bounds": {
+    "projected": [
+      0,
+      0,
+      60646,
+      60646
+    ],
+    "geographic": [
+      30.406,
+      7.5,
+      32.406,
+      9.5
+    ],
+    "center": {
+      "lat": 8.5,
+      "lon": 31.4,
+      "label": "8.50°N, 31.40°E"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": -2708.5,
+    "maxElevation": -353.5,
+    "reliefMeters": 2355
+  },
+  "provenance": {
+    "datasetName": "LRO LOLA Gridded Data Record LDEM_64 (V3.1, 64 pix/deg)",
+    "provider": "NASA GSFC / MIT LOLA Team / PDS Geosciences Node",
+    "instrumentOrMission": "Lunar Reconnaissance Orbiter (LRO) — LOLA",
+    "originalUrl": "https://imbrium.mit.edu/",
+    "cogUrl": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.img",
+    "productId": "LDEM_64 (LRO-L-LOLA-4-GDR-V1.0 V3.1)",
+    "acquisitionRange": "2009-07-13 to 2016-11-29 (Mission Phase LRO_ES_52)",
+    "processingPerformed": "Direct 128×128 binary window extracted via HTTP Range read from LDEM_64.IMG (16-bit LSB integer * 0.5 m scaling factor).",
+    "resamplingMethod": "Native 64 pixels/degree (473.802 m/pix) cylindrical grid",
+    "limitations": "473.8 m/pix regional resolution captures volcanic domes, rilles, and mare basins but not sub-100 m skylight pit overhangs."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

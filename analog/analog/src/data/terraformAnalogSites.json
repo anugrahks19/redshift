@@ -1,0 +1,98 @@
+[
+  {
+    "id": "meteor-crater",
+    "name": "Meteor Crater, Arizona",
+    "lat": 35.027,
+    "lon": -111.023,
+    "source": "https://www.usgs.gov/science/science-explorer/planetary-science/terrestrial-analogs",
+    "note": "Well-preserved impact crater"
+  },
+  {
+    "id": "sunset-crater",
+    "name": "Sunset Crater, Arizona",
+    "lat": 35.365,
+    "lon": -111.503,
+    "source": "https://www.usgs.gov/science/science-explorer/planetary-science/terrestrial-analogs",
+    "note": "Volcanic cinder cone and lava flows"
+  },
+  {
+    "id": "sp-mountain",
+    "name": "SP Mountain, Arizona",
+    "lat": 35.582,
+    "lon": -111.629,
+    "source": "https://www.usgs.gov/science/science-explorer/planetary-science/terrestrial-analogs",
+    "note": "Basaltic lava flow and volcanic cone"
+  },
+  {
+    "id": "cinder-lake",
+    "name": "Cinder Lake, Arizona",
+    "lat": 35.273,
+    "lon": -111.538,
+    "source": "https://science.nasa.gov/earth/arizonas-lunar-craters/",
+    "note": "Apollo geological training area. The small training craters are below the DEM resolution."
+  },
+  {
+    "id": "craters-of-the-moon",
+    "name": "Craters of the Moon, Idaho",
+    "lat": 43.43,
+    "lon": -113.54,
+    "source": "https://science.nasa.gov/earth/earth-observatory/moonscapes-of-idaho-154207/",
+    "note": "Basalt lava field used for lunar field training"
+  },
+  {
+    "id": "aden-crater",
+    "name": "Aden Crater, New Mexico",
+    "lat": 32.079,
+    "lon": -106.975,
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "note": "Shield volcano used in planetary volcanology field research"
+  },
+  {
+    "id": "lake-salda",
+    "name": "Lake Salda, Türkiye",
+    "lat": 37.55,
+    "lon": 29.65,
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "note": "Shoreline used as a geological analog for Jezero. Terrain scores do not measure lake chemistry."
+  },
+  {
+    "id": "ries-crater",
+    "name": "Nördlinger Ries, Germany",
+    "lat": 48.88,
+    "lon": 10.49,
+    "source": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/CAVES_and_Pangaea/What_is_PANGAEA",
+    "note": "Impact crater used for lunar geology training"
+  },
+  {
+    "id": "lanzarote-timanfaya",
+    "name": "Timanfaya, Lanzarote",
+    "lat": 29.015,
+    "lon": -13.75,
+    "source": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/CAVES_and_Pangaea/What_is_PANGAEA",
+    "note": "Volcanic terrain used for astronaut field training"
+  },
+  {
+    "id": "lofoten",
+    "name": "Lofoten, Norway",
+    "lat": 68.22,
+    "lon": 14.56,
+    "source": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/CAVES_and_Pangaea/What_is_PANGAEA",
+    "note": "Field training region for lunar highland geology"
+  },
+  {
+    "id": "kilauea",
+    "name": "Kīlauea Iki, Hawaiʻi",
+    "lat": 19.414,
+    "lon": -155.246,
+    "source": "https://doi.org/10.1089/ast.2018.1847",
+    "note": "Basalt and lava lake terrain studied as a Mars analog"
+  },
+  {
+    "id": "lava-beds",
+    "name": "Lava Beds, California",
+    "lat": 41.717,
+    "lon": -121.508,
+    "source": "https://science.nasa.gov/solar-system/analog-explorer/",
+    "note": "Volcanic surface above lava caves studied as lunar analogs"
+  }
+]

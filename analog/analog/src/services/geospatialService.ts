@@ -1,14 +1,23 @@
+import { createTemperatureSampler } from './thermalSampling.mjs';
+import { deriveTerrainMetrics } from './terrainMetrics.mjs';
 import type {
   DerivedTerrainGrid,
   DifferenceAnalysisResult,
   DistributionBin,
   MetricSummaryStats,
+  SimilarityWeights,
   SpatialLayerId,
   TerrainGridDataset,
   TerrainSampleInspection,
   TransectPreset,
   TransectSample,
 } from '../types/terrain';
+import type {
+  DivinerPcpDataset,
+  ModisSiteProfile,
+  Section9ThermalBundle,
+  BaseCertificationDataset,
+} from './terrainDataService';
 
 const COMPASS_SECTORS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] as const;
 
@@ -75,69 +84,9 @@ export function buildHistogram(
  */
 export function computeDerivedTerrain(dataset: TerrainGridDataset): DerivedTerrainGrid {
   const { gridWidth: W, gridHeight: H, cellSizeMeters: cell, elevations } = dataset;
-  const n = W * H;
-  const slopeDegrees: (number | null)[] = new Array(n).fill(null);
-  const aspectDegrees: (number | null)[] = new Array(n).fill(null);
-  const roughnessTriMeters: (number | null)[] = new Array(n).fill(null);
-  const validElevationMask: boolean[] = elevations.map((v) => v !== null && Number.isFinite(v));
-  const validDerivedMask: boolean[] = new Array(n).fill(false);
-
-  if (dataset.dataState !== 'UNAVAILABLE' && elevations.length === n) {
-    for (let r = 1; r < H - 1; r++) {
-      for (let c = 1; c < W - 1; c++) {
-        const idx = r * W + c;
-        const a = elevations[(r - 1) * W + (c - 1)];
-        const b = elevations[(r - 1) * W + c];
-        const cVal = elevations[(r - 1) * W + (c + 1)];
-        const d = elevations[r * W + (c - 1)];
-        const e = elevations[idx];
-        const f = elevations[r * W + (c + 1)];
-        const g = elevations[(r + 1) * W + (c - 1)];
-        const h = elevations[(r + 1) * W + c];
-        const iVal = elevations[(r + 1) * W + (c + 1)];
-
-        if (
-          a == null || b == null || cVal == null ||
-          d == null || e == null || f == null ||
-          g == null || h == null || iVal == null
-        ) {
-          continue;
-        }
-
-        // Horn (1981) 3x3 gradient
-        const dzdx = ((cVal + 2 * f + iVal) - (a + 2 * d + g)) / (8 * cell);
-        // Row 0 is North (+Y), row increases South (-Y) -> positive dzdy slopes up toward North
-        const dzdy = ((a + 2 * b + cVal) - (g + 2 * h + iVal)) / (8 * cell);
-        const slopeRad = Math.atan(Math.sqrt(dzdx * dzdx + dzdy * dzdy));
-        const slopeDeg = (slopeRad * 180) / Math.PI;
-        slopeDegrees[idx] = Math.round(slopeDeg * 100) / 100;
-
-        // Aspect clockwise from North (0 = North, 90 = East, 180 = South, 270 = West)
-        if (slopeDeg < 0.05) {
-          aspectDegrees[idx] = null; // Flat surface has undefined aspect
-        } else {
-          // Downhill vector is (-dzdx, -dzdy) where +y is North
-          const aspectRad = Math.atan2(-dzdx, -dzdy);
-          const asp = (((aspectRad * 180) / Math.PI) + 360) % 360;
-          aspectDegrees[idx] = Math.round(asp * 10) / 10;
-        }
-
-        // Terrain Ruggedness Index (mean absolute difference to 8 neighbors in 3x3 = 90m x 90m window)
-        const tri =
-          (Math.abs(e - a) +
-            Math.abs(e - b) +
-            Math.abs(e - cVal) +
-            Math.abs(e - d) +
-            Math.abs(e - f) +
-            Math.abs(e - g) +
-            Math.abs(e - h) +
-            Math.abs(e - iVal)) /
-          8;
-        roughnessTriMeters[idx] = Math.round(tri * 100) / 100;
-        validDerivedMask[idx] = true;
-      }
-    }
-  }
+  const { slopeDegrees, aspectDegrees, roughnessTriMeters } = deriveTerrainMetrics(dataset);
+  const validElevationMask = elevations.map(Number.isFinite);
+  const validDerivedMask = slopeDegrees.map(Number.isFinite);
 
   return {
     datasetId: dataset.id,
@@ -153,8 +102,8 @@ export function computeDerivedTerrain(dataset: TerrainGridDataset): DerivedTerra
     roughnessStats: computeSummaryStats(roughnessTriMeters),
     slopeHistogram: buildHistogram(slopeDegrees, [0, 2, 5, 10, 15, 25, 45], '°'),
     roughnessHistogram: buildHistogram(roughnessTriMeters, [0, 1, 2, 4, 8, 15, 40], 'm'),
-    slopeMethod: 'Horn (1981) 3×3 finite-difference gradient at 30.0 m cell spacing',
-    roughnessMethod: 'Mean absolute 8-neighbor elevation difference (TRI) over 3×3 (90 m × 90 m) window',
+    slopeMethod: `Horn (1981) 3×3 gradient at ${cell} m cell spacing`,
+    roughnessMethod: 'Riley TRI: square root of summed squared 8-neighbor elevation differences (m)',
   };
 }
 
@@ -184,11 +133,28 @@ export function inspectGridCell(
   const slope = derived.slopeDegrees[idx] ?? null;
   const aspect = derived.aspectDegrees[idx] ?? null;
   const roughness = derived.roughnessTriMeters[idx] ?? null;
+  const tempC = derived.temperatureCelsiusGrid?.[idx] ?? null;
+  const tempK = derived.temperatureKelvinGrid?.[idx] ?? (tempC !== null ? Math.round((tempC + 273.15) * 100) / 100 : null);
+  const simScore = derived.similarityIndexGrid?.[idx] ?? null;
+  const certRasters = derived.certificationRasters ?? null;
+  const certification = certRasters
+    ? {
+        radiationMsvYr: certRasters.radiationMsvYr[idx] ?? null,
+        skyViewSteradians: certRasters.skyViewSteradians[idx] ?? null,
+        waterIceWehPct: certRasters.waterIceWehPct[idx] ?? null,
+        illuminationPct: certRasters.illuminationPct[idx] ?? null,
+        dteCommsPct: certRasters.dteCommsPct[idx] ?? null,
+        rockAbundancePct: certRasters.rockAbundancePct[idx] ?? null,
+        bearingCapacityKpa: certRasters.bearingCapacityKpa[idx] ?? null,
+      }
+    : null;
 
   const projectedLabel =
     dataset.planet === 'Earth'
-      ? `E ${projX.toFixed(0)} m, N ${projY.toFixed(0)} m (UTM 19S)`
-      : `X ${projX.toFixed(0)} m, Y ${projY.toFixed(0)} m (Mars Eq.)`;
+      ? `E ${projX.toFixed(0)} m, N ${projY.toFixed(0)} m`
+      : dataset.planet === 'Moon'
+        ? `X ${projX.toFixed(0)} m, Y ${projY.toFixed(0)} m (Lunar Stereo)`
+        : `X ${projX.toFixed(0)} m, Y ${projY.toFixed(0)} m (Mars Eq.)`;
 
   const latDir = lat >= 0 ? 'N' : 'S';
   const lonDir = lon >= 0 ? 'E' : 'W';
@@ -212,9 +178,167 @@ export function inspectGridCell(
     aspectDegrees: aspect,
     aspectCompass: degreesToCompass(aspect),
     roughnessTriMeters: roughness,
+    temperatureCelsius: tempC,
+    temperatureKelvin: tempK,
+    similarityScore: simScore,
+    certification,
     inValidCoverage: elev !== null,
     datasetName: dataset.provenance.datasetName,
     dataState: dataset.dataState,
+  };
+}
+
+
+export function attachTemperatureAndSimilarityGrids(
+  earthDataset: TerrainGridDataset | null,
+  earthDerived: DerivedTerrainGrid | null,
+  marsDataset: TerrainGridDataset | null,
+  marsDerived: DerivedTerrainGrid | null,
+  modisSite: ModisSiteProfile | null,
+  divinerDataset: DivinerPcpDataset | null,
+  modisTimeMode: 'day' | 'night',
+  weights: SimilarityWeights,
+  section9Options?: {
+    moonGlobalThermal?: Section9ThermalBundle | null;
+    marsTesThermal?: Section9ThermalBundle | null;
+    baseCertification?: BaseCertificationDataset | null;
+  }
+): {
+  earthEnhanced: DerivedTerrainGrid | null;
+  marsEnhanced: DerivedTerrainGrid | null;
+  effectiveWeights: SimilarityWeights;
+  temperatureIncluded: boolean;
+  missingParameterDisclosure: string;
+} {
+  const W = earthDataset?.gridWidth ?? 128;
+  const H = earthDataset?.gridHeight ?? 128;
+  const n = W * H;
+
+  const earthSampler = createTemperatureSampler(earthDataset, modisSite, null, modisTimeMode);
+  const targetSampler = createTemperatureSampler(marsDataset, null, divinerDataset);
+  const earthSamples = Array.from({ length: n }, (_, i) => earthSampler(Math.floor(i / W), i % W));
+  const targetWidth = marsDataset?.gridWidth ?? W;
+  const targetCount = targetWidth * (marsDataset?.gridHeight ?? H);
+  const targetSamples = Array.from({ length: targetCount }, (_, i) => targetSampler(Math.floor(i / targetWidth), i % targetWidth));
+  const earthTempC = earthSamples.map((sample) => sample?.celsius ?? null);
+  const earthTempK = earthSamples.map((sample) => sample?.kelvin ?? null);
+  const targetTempC = targetSamples.map((sample) => sample?.celsius ?? null);
+  const targetTempK = targetSamples.map((sample) => sample?.kelvin ?? null);
+  const earthTempAvail = earthSamples.some(Boolean);
+  const targetTempAvail = targetSamples.some(Boolean);
+  const earthTempLabel = `MODIS ${modisTimeMode} LST · ${modisSite?.granuleId ?? 'unavailable'}`;
+  const targetTempLabel = `Diviner PCP · 240 m · southern summer · local time 00:00–00:15`;
+  const earthTempReason = earthTempAvail ? '' : 'No valid MODIS pixels in this DEM footprint and observation window.';
+  const targetTempReason = targetTempAvail ? '' : 'No verified surface temperature pixels in this DEM footprint.';
+
+  // 3. Re-normalize Similarity Weights when Temperature is unavailable on either body
+  // The bundled Earth and lunar products have different observation contexts.
+  const tempComparable = false;
+  const wElev = Math.max(0, weights.elevation);
+  const wSlope = Math.max(0, weights.slope);
+  const wRough = Math.max(0, weights.roughness);
+  const wTemp = tempComparable ? Math.max(0, weights.temperature) : 0;
+  const supportedWeight = wElev + wSlope + wRough + wTemp;
+  const wSum = supportedWeight || 1;
+  const effectiveWeights: SimilarityWeights = {
+    elevation: wElev / wSum,
+    slope: wSlope / wSum,
+    roughness: wRough / wSum,
+    temperature: wTemp / wSum,
+  };
+
+  const missingParameterDisclosure = tempComparable
+    ? 'All 4 raster parameters (Elevation, Slope, Roughness, Surface Temperature) are included in the Exploratory Analog Similarity Index.'
+    : `Temperature excluded (${!targetTempAvail ? targetTempReason : !earthTempAvail ? earthTempReason : 'different observation contexts'}). Weights automatically re-normalized across Elevation (${Math.round(effectiveWeights.elevation * 100)}%), Slope (${Math.round(effectiveWeights.slope * 100)}%), and Roughness (${Math.round(effectiveWeights.roughness * 100)}%).`;
+
+  // 4. Compute Cell-by-Cell Exploratory Analog Similarity Index (0..100)
+  const similarityGrid: (number | null)[] = new Array(n).fill(null);
+  if (earthDataset && earthDerived && marsDataset && marsDerived && marsDataset.dataState !== 'UNAVAILABLE' && supportedWeight > 0 && targetWidth === W && targetCount === n) {
+    const eMin = earthDataset.stats.minElevation;
+    const eSpan = Math.max(1, earthDataset.stats.reliefMeters);
+    const mMin = marsDataset.stats.minElevation;
+    const mSpan = Math.max(1, marsDataset.stats.reliefMeters);
+
+    for (let i = 0; i < n; i++) {
+      const ez = earthDataset.elevations[i];
+      const mz = marsDataset.elevations[i];
+      const es = earthDerived.slopeDegrees[i];
+      const ms = marsDerived.slopeDegrees[i];
+      const er = earthDerived.roughnessTriMeters[i];
+      const mr = marsDerived.roughnessTriMeters[i];
+
+      if (ez == null || mz == null || es == null || ms == null || er == null || mr == null) {
+        continue;
+      }
+
+      // Normalized relative elevation position + relief scale agreement
+      const eNorm = (ez - eMin) / eSpan;
+      const mNorm = (mz - mMin) / mSpan;
+      const elevSim = Math.max(0, 1 - Math.abs(eNorm - mNorm));
+
+      // Slope similarity (normalized by 30 deg dynamic range)
+      const slopeSim = Math.max(0, 1 - Math.abs(es - ms) / 30);
+
+      // Roughness similarity (normalized by 15 m TRI dynamic range)
+      const roughSim = Math.max(0, 1 - Math.abs(er - mr) / (15 * Math.sqrt(8)));
+
+      // Temperature similarity (normalized by 250 K planetary thermal span when both exist)
+      let tempSim = 0;
+      const ek = earthTempK[i] ?? null;
+      const mk = targetTempK[i] ?? null;
+      if (tempComparable && ek !== null && mk !== null) {
+        tempSim = Math.max(0, 1 - Math.abs(ek - mk) / 250);
+      }
+
+      const combined =
+        elevSim * effectiveWeights.elevation +
+        slopeSim * effectiveWeights.slope +
+        roughSim * effectiveWeights.roughness +
+        tempSim * effectiveWeights.temperature;
+
+      similarityGrid[i] = Math.round(Math.max(0, Math.min(100, combined * 100)) * 10) / 10;
+    }
+  }
+
+  const simStats = computeSummaryStats(similarityGrid);
+
+  const earthEnhanced: DerivedTerrainGrid | null = earthDerived
+    ? {
+        ...earthDerived,
+        temperatureCelsiusGrid: earthTempC,
+        temperatureKelvinGrid: earthTempK,
+        temperatureStatsCelsius: earthTempAvail ? computeSummaryStats(earthTempC) : null,
+        temperatureAvailable: earthTempAvail,
+        temperatureDatasetLabel: earthTempLabel,
+        temperatureUnavailableReason: earthTempReason,
+        similarityIndexGrid: similarityGrid,
+        similarityStats: simStats,
+      }
+    : null;
+
+  const certRegion = marsDataset ? section9Options?.baseCertification?.regions?.[marsDataset.id] : null;
+
+  const marsEnhanced: DerivedTerrainGrid | null = marsDerived
+    ? {
+        ...marsDerived,
+        temperatureCelsiusGrid: targetTempC,
+        temperatureKelvinGrid: targetTempK,
+        temperatureStatsCelsius: targetTempAvail ? computeSummaryStats(targetTempC) : null,
+        temperatureAvailable: targetTempAvail,
+        temperatureDatasetLabel: targetTempLabel,
+        temperatureUnavailableReason: targetTempReason,
+        similarityIndexGrid: similarityGrid,
+        similarityStats: simStats,
+        certificationRasters: certRegion?.rasters ?? null,
+      }
+    : null;
+
+  return {
+    earthEnhanced,
+    marsEnhanced,
+    effectiveWeights,
+    temperatureIncluded: tempComparable,
+    missingParameterDisclosure,
   };
 }
 
@@ -313,6 +437,37 @@ const DIFF_STOPS: [number, number, number][] = [
   [194, 139, 56],  // positive (Earth higher)
 ];
 
+const TEMPERATURE_STOPS: [number, number, number][] = [
+  [28, 37, 116],   // cryogenic / deep cold
+  [43, 114, 181],  // freezing
+  [68, 168, 152],  // cool temperate
+  [224, 168, 62],  // warm
+  [208, 72, 48],   // hot thermal peak
+];
+
+const SIMILARITY_STOPS: [number, number, number][] = [
+  [38, 52, 74],    // low similarity (0-30)
+  [46, 112, 142],  // moderate-low (30-55)
+  [52, 158, 128],  // moderate-high (55-80)
+  [216, 178, 72],  // high analog convergence (80-100)
+];
+
+export function getTemperatureColor(
+  tempC: number | null,
+  minC: number,
+  maxC: number
+): [number, number, number] {
+  if (tempC === null || !Number.isFinite(tempC)) return [0.34, 0.39, 0.46];
+  const span = Math.max(1, maxC - minC);
+  const t = Math.max(0, Math.min(1, (tempC - minC) / span));
+  return sampleStops(TEMPERATURE_STOPS, t);
+}
+
+export function getSimilarityColor(score: number | null): [number, number, number] {
+  if (score === null || !Number.isFinite(score)) return [0.34, 0.39, 0.46];
+  return sampleStops(SIMILARITY_STOPS, Math.max(0, Math.min(1, score / 100)));
+}
+
 export function getElevationColor(t: number, planet: 'Earth' | 'Mars' | 'Moon'): [number, number, number] {
   return sampleStops(planet === 'Mars' ? MARS_ELEV_STOPS : EARTH_ELEV_STOPS, t);
 }
@@ -350,6 +505,7 @@ export interface SpatialRenderOptions {
   dataset: TerrainGridDataset;
   derived: DerivedTerrainGrid;
   activeLayer: SpatialLayerId;
+  heatmapOpacity?: number;
   differenceGrid?: DifferenceAnalysisResult | null;
   showDifferenceOverlay?: boolean;
   reliefSpanOverride?: number | null;
@@ -449,6 +605,7 @@ export function renderSpatialMapToCanvas(
     dataset,
     derived,
     activeLayer,
+    heatmapOpacity = 1.0,
     differenceGrid = null,
     showDifferenceOverlay = false,
     reliefSpanOverride = null,
@@ -551,13 +708,15 @@ export function renderSpatialMapToCanvas(
         g = pixels[pIdx + 1] ?? 128;
         b = pixels[pIdx + 2] ?? 128;
       } else {
-        let rgb: [number, number, number] = [0.5, 0.5, 0.5];
+        const elevT = elev !== null ? (elev - minElev) / elevSpan : 0;
+        const baseElevRgb = getElevationColor(elevT, dataset.planet);
+        let rgb: [number, number, number] = baseElevRgb;
+
         if (showDifferenceOverlay && differenceGrid?.valid) {
           const diffVal = bilinearSampleNullable(differenceGrid.gridValues, W, H, gx, gy);
           rgb = getDifferenceColor(diffVal, maxAbsDiff);
-        } else if (activeLayer === 'elevation' || activeLayer === 'geology') {
-          const t = elev !== null ? (elev - minElev) / elevSpan : 0;
-          rgb = getElevationColor(t, dataset.planet);
+        } else if (activeLayer === 'elevation' || activeLayer === 'geology' || activeLayer === 'imagery') {
+          rgb = baseElevRgb;
         } else if (activeLayer === 'slope') {
           const slopeVal = bilinearSampleNullable(derived.slopeDegrees, W, H, gx, gy);
           rgb = getSlopeColor(slopeVal);
@@ -567,17 +726,35 @@ export function renderSpatialMapToCanvas(
         } else if (activeLayer === 'roughness') {
           const triVal = bilinearSampleNullable(derived.roughnessTriMeters, W, H, gx, gy);
           rgb = getRoughnessColor(triVal);
+        } else if (activeLayer === 'temperature') {
+          if (derived.temperatureAvailable && derived.temperatureCelsiusGrid && derived.temperatureStatsCelsius) {
+            const tempVal = bilinearSampleNullable(derived.temperatureCelsiusGrid, W, H, gx, gy);
+            rgb = getTemperatureColor(
+              tempVal,
+              derived.temperatureStatsCelsius.min,
+              derived.temperatureStatsCelsius.max
+            );
+          } else {
+            // Strictly uncolored neutral slate when temperature dataset is unavailable (e.g. Mars MOLA)
+            rgb = [0.33, 0.38, 0.44];
+          }
+        } else if (activeLayer === 'similarity') {
+          if (derived.similarityIndexGrid) {
+            const simVal = bilinearSampleNullable(derived.similarityIndexGrid, W, H, gx, gy);
+            rgb = getSimilarityColor(simVal);
+          } else {
+            rgb = [0.33, 0.38, 0.44];
+          }
         } else if (activeLayer === 'coverage') {
           const isValid = derived.validElevationMask[rNearest * W + cNearest];
           const isEdge = rNearest === 0 || cNearest === 0 || rNearest === H - 1 || cNearest === W - 1;
           rgb = !isValid ? [0.71, 0.29, 0.2] : isEdge ? [0.76, 0.55, 0.22] : [0.2, 0.5, 0.47];
-        } else if (activeLayer === 'imagery') {
-          const t = elev !== null ? (elev - minElev) / elevSpan : 0;
-          rgb = getElevationColor(t, dataset.planet);
         }
-        r = rgb[0] * 255;
-        g = rgb[1] * 255;
-        b = rgb[2] * 255;
+
+        const alpha = Math.max(0.15, Math.min(1, heatmapOpacity));
+        r = (rgb[0] * alpha + baseElevRgb[0] * (1 - alpha)) * 255;
+        g = (rgb[1] * alpha + baseElevRgb[1] * (1 - alpha)) * 255;
+        b = (rgb[2] * alpha + baseElevRgb[2] * (1 - alpha)) * 255;
       }
 
       // Apply directional hillshade contrast

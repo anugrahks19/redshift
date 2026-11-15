@@ -1,0 +1,74 @@
+PDS_VERSION_ID               = PDS3
+
+RECORD_TYPE                  = FIXED_LENGTH
+RECORD_BYTES                 = 59
+FILE_RECORDS                 = 3604301
+
+DESCRIPTION                  = "This table contains bolometric brightness 
+                                temperatures from the Diviner Lunar Radiometer
+                                Experiment binned at 240 m and 0.25 hours of 
+                                local time derived from a compilation of all
+                                nadir observations acquired from 5-July-2009 to
+                                17-February-2019 with subsolar latitude less
+                                than zero degrees (summer season). Columns are 
+                                distances from pole (x,y) normalized by mean radius
+                                1737.4 km, longitude, latitude, bolometric temperature.
+                                Empty bins are omitted.
+                                For more information, please see:
+                                Williams et al. (2019) 'Seasonal polar
+                                temperatures on the Moon', 
+                                J. Geophys. Res, 124, 2505-2521.
+                               "
+^HEADER                      = ("PCP_AVG_TBOL_POLS_SUM_LTIM01_240.TAB",1)
+^TABLE                       = ("PCP_AVG_TBOL_POLS_SUM_LTIM01_240.TAB",2)
+DATA_SET_ID                  = "LRO-L-DLRE-5-GCP-V1.0"
+FILE_NAME                    = "PCP_AVG_TBOL_POLS_SUM_LTIM01_240.LBL"
+MISSION_NAME                 = "LUNAR RECONNAISSANCE ORBITER"
+INSTRUMENT_HOST_NAME         = "LUNAR RECONNAISSANCE ORBITER"
+INSTRUMENT_HOST_ID           = "LRO"
+INSTRUMENT_NAME              = "DIVINER LUNAR RADIOMETER EXPERIMENT"
+INSTRUMENT_ID                = "DLRE"
+PRODUCT_TYPE                 = "PCP"
+PRODUCT_ID                   = "PCP_AVG_TBOL_POLS_SUM_LTIM01_240.TAB"
+LRO:CALIBRATION_SOFTWARE_VER_ID = "4.0"
+PRODUCER_ID                  = LRO_DLRE_TEAM
+PRODUCER_FULL_NAME           = "JEAN-PIERRE WILLIAMS"
+PRODUCER_INSTITUTION_NAME    = "UNIVERSITY OF CALIFORNIA, LOS ANGELES"
+A_AXIS_RADIUS                = 1737.4 <km>
+B_AXIS_RADIUS                = 1737.4 <km>
+C_AXIS_RADIUS                = 1737.4 <km>
+TARGET_NAME                  = "MOON"
+START_TIME                   = 2009-07-05T16:50:26.195
+STOP_TIME                    = 2019-02-17T00:00:00.000
+SPACECRAFT_CLOCK_START_COUNT = "0268505426.15400"
+SPACECRAFT_CLOCK_STOP_COUNT  = "0449539200.05636"
+PRODUCT_CREATION_TIME        = 2019-07-26T12:00:00
+PRODUCT_VERSION_ID           = "1"
+MAXIMUM_LATITUDE             = -80.00000 <deg>
+MINIMUM_LATITUDE             = -90.00000 <deg>
+WESTERNMOST_LONGITUDE        = -180.00000 <deg>
+EASTERNMOST_LONGITUDE        = 180.00000 <deg>
+POSITIVE_LONGITUDE_DIRECTION = "EAST"
+MINIMUM_WAVELENGTH           = 0.35 <micron>
+MAXIMUM_WAVELENGTH           = 400.0 <micron>
+LRO:DLRE_CLOCTIME_MIN        = 0.00 <hour>
+LRO:DLRE_CLOCTIME_MAX        = 0.25 <hour>
+MAP_PROJECTION_TYPE          = "POLAR STEREOGRAPHIC"
+KEYWORD_LATITUDE_TYPE        = "PLANETOCENTRIC"
+MAP_RESOLUTION               = 126.347 <pix/degree>
+MAP_SCALE                    = 240 <m/pix>
+
+OBJECT                       = HEADER
+  BYTES                      = 59
+  HEADER_TYPE                = "TEXT"
+END_OBJECT                   = HEADER
+
+OBJECT                       = TABLE
+  INTERCHANGE_FORMAT         = ASCII
+  ROW_BYTES                  = 59
+  ROWS                       = 3604300
+  COLUMNS                    = 5
+  ^STRUCTURE                 = "DLRE_PCP.FMT"
+END_OBJECT                   = TABLE
+
+END

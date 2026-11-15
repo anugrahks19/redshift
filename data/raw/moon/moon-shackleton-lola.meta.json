@@ -1,0 +1,54 @@
+{
+  "id": "moon-shackleton-lola",
+  "siteId": "shackleton-rim",
+  "planet": "Moon",
+  "siteName": "Lunar South Pole — Shackleton Crater Rim & Wall (LRO LOLA GDR)",
+  "crs": "IAU2000 Moon South Polar Stereographic (DE421)",
+  "nativeCrs": "POLAR STEREOGRAPHIC (LDEM_75S_30M / LRO-L-LOLA-4-GDR-V1.0)",
+  "verticalDatum": "Lunar Reference Sphere R = 1,737,400 m (GRAIL GRGM 900C)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      1455,
+      -3375,
+      5295,
+      465
+    ],
+    "geographic": [
+      124.2,
+      -89.76,
+      135.4,
+      -89.58
+    ],
+    "center": {
+      "lat": -89.67,
+      "lon": 129.78,
+      "label": "89.67°S, 129.78°E (Shackleton Rim)"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": -2245.5,
+    "maxElevation": 1032.5,
+    "reliefMeters": 3278
+  },
+  "provenance": {
+    "datasetName": "LRO LOLA Gridded Data Record (LDEM_75S_30M & LDEM_64, LRO-L-LOLA-4-GDR-V1.0)",
+    "provider": "NASA GSFC / MIT LOLA Team / PDS Geosciences Node",
+    "instrumentOrMission": "Lunar Reconnaissance Orbiter (LRO) — Lunar Orbiter Laser Altimeter (LOLA)",
+    "originalUrl": "https://imbrium.mit.edu/",
+    "cogUrl": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/ldem_75s_30m.img",
+    "productId": "LDEM_75S_30M / LDEM_64 (LRO-L-LOLA-4-GDR-V1.0)",
+    "acquisitionRange": "2009-07-13 to 2017-02-02 (Mission Phase LRO_ES_54)",
+    "processingPerformed": "Direct binary subset extraction via HTTP Range request from PDS Geosciences LOLA GDR polar stereographic 16-bit LSB integer grid (DN * 0.5 m relative to 1737.4 km reference sphere).",
+    "resamplingMethod": "Native 30.0 m/pix Polar Stereographic grid (no synthetic interpolation)",
+    "limitations": "Represents bare regolith topography relative to 1,737.4 km sphere; sub-30 m boulders require LROC NAC stereo DTMs."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

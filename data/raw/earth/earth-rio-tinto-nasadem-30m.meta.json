@@ -1,0 +1,54 @@
+{
+  "id": "earth-rio-tinto-nasadem-30m",
+  "siteId": "rio-tinto",
+  "planet": "Earth",
+  "siteName": "Río Tinto Acid Sulfate Basin, Spain (NASADEM_HGT V001)",
+  "crs": "EPSG:32629 (UTM Zone 29N) (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM96 geoid orthometric height (NASADEM_HGT V001)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      713192,
+      4173412,
+      717032,
+      4177252
+    ],
+    "geographic": [
+      -6.582319999999999,
+      37.68226,
+      -6.53767,
+      37.71774
+    ],
+    "center": {
+      "lat": 37.7,
+      "lon": -6.56,
+      "label": "37°42'00\"N, 6°33'36\"W"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 270.62,
+    "maxElevation": 487.29,
+    "reliefMeters": 216.67
+  },
+  "provenance": {
+    "datasetName": "NASADEM Merged DEM Global 1 arc second V001 (NASADEM_HGT)",
+    "provider": "NASA JPL / LP DAAC (C2763264762-LPCLOUD)",
+    "instrumentOrMission": "Shuttle Radar Topography Mission (SRTM) + ASTER GDEM v3 + ICESat GLAS",
+    "originalUrl": "https://search.earthdata.nasa.gov/search/granules?p=C2763264762-LPCLOUD",
+    "cogUrl": "https://nasademeuwest.blob.core.windows.net/nasadem-cog/v001/NASADEM_HGT_n37w007.tif",
+    "productId": "NASADEM_HGT_n37w007 (V001)",
+    "acquisitionRange": "2000-02-11 to 2000-02-22 (V001 2020)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from NASADEM_HGT_n37w007 (V001) and bilinearly resampled onto 30.0 m EPSG:32629 (UTM Zone 29N) grid. NASADEM coverage check: COVERED (Within 60°N–56°S SRTM/NASADEM orbital bounds).",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "COVERED (Within 60°N–56°S SRTM/NASADEM orbital bounds)"
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

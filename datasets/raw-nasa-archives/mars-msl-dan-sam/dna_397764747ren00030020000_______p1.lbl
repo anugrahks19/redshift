@@ -1,0 +1,46 @@
+PDS_VERSION_ID                  = PDS3
+
+/* FILE DATA ELEMENTS */
+RECORD_TYPE                     = FIXED_LENGTH
+RECORD_BYTES                    = 63
+FILE_RECORDS                    = 20
+
+/* IDENTIFICATION DATA ELEMENTS */
+DATA_SET_ID                     = "MSL-M-DAN-3/4-RDR-V1.0"
+COMMAND_SEQUENCE_NUMBER         = 0
+INSTRUMENT_HOST_ID              = MSL
+INSTRUMENT_HOST_NAME            = "MARS SCIENCE LABORATORY"
+INSTRUMENT_NAME                 = "DYNAMIC ALBEDO OF NEUTRONS"
+PLANET_DAY_NUMBER               = 3
+PRODUCT_CREATION_TIME           = 2013-05-21T13:51:31.958
+PRODUCT_ID                      = "DNA_397764747REN00030020000_______P1.DAT"
+PRODUCT_TYPE                    = DAN_RDR_EN
+PRODUCT_VERSION_ID              = "2.0"
+RELEASE_ID                      = "0001"
+SPACECRAFT_CLOCK_START_COUNT    = "397764747.065476"
+SPACECRAFT_CLOCK_STOP_COUNT     = "397765136.065502"
+START_TIME                      = 2012-08-09T06:14:41.211
+STOP_TIME                       = 2012-08-09T06:21:10.215
+TARGET_NAME                     = MARS
+^TABLE                          = "DNA_397764747REN00030020000_______P1.DAT"
+
+OBJECT                          = TABLE
+   COLUMNS                      = 13
+   INTERCHANGE_FORMAT           = BINARY
+   ROW_BYTES                    = 63
+   ROWS                         = 20
+   DESCRIPTION                  = "
+    This table contains converted engineering data
+    as observed by the Mars Science Laboratory (MSL) Dynamic Albedo of
+    Neutron Detector (DAN).
+
+    Detailed descriptions for the parameters defined below are
+    contained in the DAN RDR SIS document .
+
+    The complete column definitions are contained in the following external 
+    file found in the LABEL directory of the archive volume.
+    "
+   ^STRUCTURE                    = "DAN_RDR_DERIVED_ENG.FMT"
+END_OBJECT                       = TABLE
+END
+

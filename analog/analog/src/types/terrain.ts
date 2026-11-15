@@ -5,6 +5,8 @@ export type SpatialLayerId =
   | 'slope'
   | 'aspect'
   | 'roughness'
+  | 'temperature'
+  | 'similarity'
   | 'imagery'
   | 'geology'
   | 'coverage';
@@ -97,6 +99,23 @@ export interface MetricSummaryStats {
   stdDev: number;
 }
 
+export interface SimilarityWeights {
+  elevation: number;
+  slope: number;
+  roughness: number;
+  temperature: number;
+}
+
+export interface BaseCertificationCellTelemetry {
+  radiationMsvYr: number | null;
+  skyViewSteradians: number | null;
+  waterIceWehPct: number | null;
+  illuminationPct: number | null;
+  dteCommsPct: number | null;
+  rockAbundancePct: number | null;
+  bearingCapacityKpa: number | null;
+}
+
 export interface DerivedTerrainGrid {
   datasetId: string;
   gridWidth: number;
@@ -113,6 +132,23 @@ export interface DerivedTerrainGrid {
   roughnessHistogram: DistributionBin[];
   slopeMethod: string;
   roughnessMethod: string;
+  temperatureCelsiusGrid?: (number | null)[];
+  temperatureKelvinGrid?: (number | null)[];
+  temperatureStatsCelsius?: MetricSummaryStats | null;
+  temperatureAvailable?: boolean;
+  temperatureDatasetLabel?: string;
+  temperatureUnavailableReason?: string;
+  similarityIndexGrid?: (number | null)[];
+  similarityStats?: MetricSummaryStats | null;
+  certificationRasters?: {
+    radiationMsvYr: number[];
+    skyViewSteradians: number[];
+    waterIceWehPct: number[];
+    illuminationPct: number[];
+    dteCommsPct: number[];
+    rockAbundancePct: number[];
+    bearingCapacityKpa: number[];
+  } | null;
 }
 
 export interface TerrainSampleInspection {
@@ -133,6 +169,10 @@ export interface TerrainSampleInspection {
   aspectDegrees: number | null;
   aspectCompass: string | null;
   roughnessTriMeters: number | null;
+  temperatureCelsius?: number | null;
+  temperatureKelvin?: number | null;
+  similarityScore?: number | null;
+  certification?: BaseCertificationCellTelemetry | null;
   inValidCoverage: boolean;
   datasetName: string;
   dataState: DataState;

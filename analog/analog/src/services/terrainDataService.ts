@@ -1,10 +1,282 @@
+import expandedAnalogSites from '../data/terraformAnalogSites.json';
 import type { DataState, TerrainGridDataset } from '../types/terrain';
 
 const DATASET_URLS: Record<string, string> = {
+  ...Object.fromEntries(expandedAnalogSites.map(({ id }) => [`earth-${id}-glo30`, `/data/terrains/earth-${id}-glo30.json`])),
   'earth-yungay-copernicus-30m': '/data/terrains/yungay-atacama-30m.json',
+  'earth-yungay-nasadem-30m': '/data/terrains/yungay-nasadem-30m.json',
+  'earth-death-valley-nasadem-30m': '/data/terrains/death-valley-nasadem-30m.json',
+  'earth-mauna-kea-nasadem-30m': '/data/terrains/mauna-kea-nasadem-30m.json',
+  'earth-rio-tinto-nasadem-30m': '/data/terrains/rio-tinto-nasadem-30m.json',
+  'earth-mcmurdo-dem-30m': '/data/terrains/mcmurdo-dry-valleys-30m.json',
+  'earth-askja-dem-30m': '/data/terrains/askja-iceland-30m.json',
   'mars-gale-murray-30m': '/data/terrains/gale-murray-30m.json',
   'mars-gale-bradbury-30m': '/data/terrains/gale-bradbury-30m.json',
+  'mars-jezero-mola-megdr': '/data/terrains/mars-jezero-mola-megdr.json',
+  'moon-shackleton-lola': '/data/terrains/moon-shackleton-lola.json',
+  'moon-marius-lola': '/data/terrains/moon-marius-lola.json',
+  'moon-tranquillitatis-lola': '/data/terrains/moon-tranquillitatis-lola.json',
 };
+
+export interface PlanetaryEnvironmentReference {
+  body: 'Earth' | 'Mars' | 'Moon';
+  classification: string;
+  dataOriginNotice: string;
+  gravity_m_s2: number;
+  gravityRelativeToEarth: number;
+  surfacePressure_mbar: number;
+  pressureCategory: string;
+  atmosphereComposition: { gas: string; percent: number }[];
+  oxygenPercent: number;
+  breathableByHumans: boolean;
+  referenceTemperatureCelsius: Record<string, number | string>;
+  radiationEnvironment: string;
+  humanSafetyWarnings: string[];
+  sourceCitation: string;
+  missingPermanentBaseCriteria: {
+    criterion: string;
+    providedByFiveDatasets: boolean;
+    providedBySection9Datasets?: boolean;
+    status?: string;
+    pdsDatasets?: string[];
+    explanation: string;
+  }[];
+}
+
+export async function loadPlanetaryEnvironment(
+  body: 'earth' | 'mars' | 'moon'
+): Promise<PlanetaryEnvironmentReference> {
+  try {
+    const apiRes = await fetch(`/api/planetary-environment/${body}`);
+    if (apiRes.ok) return (await apiRes.json()) as PlanetaryEnvironmentReference;
+  } catch {
+    // Fallback to static bundle
+  }
+  const res = await fetch(`/data/planetary_environment/${body}.json`);
+  if (!res.ok) throw new Error(`Failed to load planetary environment for ${body}`);
+  return (await res.json()) as PlanetaryEnvironmentReference;
+}
+
+export interface ScientificCatalogResponse {
+  generatedAt: string;
+  pipelineVersion: string;
+  fivePriorityDatasetsStatus: {
+    priority: number;
+    id: string;
+    name: string;
+    body: string;
+    parameter: string;
+    resolution: string;
+    units: string;
+    crs: string;
+    noDataValue: number;
+    ingestionStatus: string;
+    coverageLimitation: string;
+  }[];
+  datasets: Record<string, unknown>;
+  siteScores: Record<string, unknown[]>;
+}
+
+export async function loadScientificCatalog(): Promise<ScientificCatalogResponse> {
+  try {
+    const apiRes = await fetch('/api/research/datasets');
+    if (apiRes.ok) {
+      const data = await apiRes.json();
+      if (data.fivePriorityDatasets) {
+        return {
+          generatedAt: data.generatedAt,
+          pipelineVersion: data.pipelineVersion,
+          fivePriorityDatasetsStatus: data.fivePriorityDatasets,
+          datasets: data.processedDatasets,
+          siteScores: {},
+        };
+      }
+    }
+  } catch {
+    // Fallback
+  }
+  const res = await fetch('/data/processed/scientific-catalog.json');
+  if (!res.ok) throw new Error('Failed to load scientific catalog');
+  return (await res.json()) as ScientificCatalogResponse;
+}
+
+export interface ModisSiteProfile {
+  siteId: string;
+  siteName: string;
+  granuleId: string;
+  acquisitionDate: string;
+  dayLstCogUrl: string;
+  nightLstCogUrl: string;
+  gridWidth: number;
+  gridHeight: number;
+  cellSizeMeters: number;
+  scaleFactorKelvin: number;
+  dayStatsCelsius: {
+    validCells: number;
+    min: number | null;
+    max: number | null;
+    mean: number | null;
+  };
+  nightStatsCelsius: {
+    validCells: number;
+    min: number | null;
+    max: number | null;
+    mean: number | null;
+  };
+  diurnalAmplitudeCelsius: number | null;
+  dayLstCelsiusGrid: (number | null)[];
+  nightLstCelsiusGrid: (number | null)[];
+}
+
+export interface ModisLstDataset {
+  datasetId: string;
+  product: string;
+  provider: string;
+  officialUrl: string;
+  resolutionMeters: number;
+  temporalComposite: string;
+  units: string;
+  primarySite: string;
+  sites: Record<string, ModisSiteProfile>;
+}
+
+export interface DivinerPcpDataset {
+  datasetId: string;
+  productId: string;
+  productName: string;
+  provider: string;
+  officialPortalUrl: string;
+  dataUrl: string;
+  labelUrl: string;
+  targetRegionId: string;
+  targetName: string;
+  projection: string;
+  acquisitionRange: string;
+  gridWidth: number;
+  gridHeight: number;
+  cellSizeMeters: number;
+  extentMeters: [number, number];
+  stats: {
+    validCells: number;
+    totalCells: number;
+    coveragePercent: number;
+    minKelvin: number;
+    maxKelvin: number;
+    meanKelvin: number;
+    minCelsius: number;
+    maxCelsius: number;
+    meanCelsius: number;
+    coldTrapCellsUnder110K: number;
+    coldTrapFractionPercent: number;
+  };
+  tbolKelvinGrid: (number | null)[];
+  tbolCelsiusGrid: (number | null)[];
+}
+
+let cachedModis: ModisLstDataset | null = null;
+let cachedDiviner: DivinerPcpDataset | null = null;
+
+export interface Section9ThermalRegion {
+  id: string;
+  regionKey: string;
+  name: string;
+  instrument: string;
+  pdsDataSetId: string;
+  productIds: string[];
+  sourceUrl: string;
+  grid: { rows: number; cols: number; cellSizeMeters: number };
+  stats: {
+    meanTempK: { min: number; max: number; mean: number; std: number };
+    meanTempC: { min: number; max: number; mean: number; std: number };
+    dayTempK: { min: number; max: number; mean: number; std: number };
+    nightTempK: { min: number; max: number; mean: number; std: number };
+    rockAbundancePct?: { min: number; max: number; mean: number; std: number };
+    thermalInertia?: { min: number; max: number; mean: number; std: number };
+  };
+  temperatureK: number[];
+  temperatureC: number[];
+  dayTemperatureK: number[];
+  nightTemperatureK: number[];
+  rockAbundancePct?: number[];
+  thermalInertia?: number[];
+}
+
+export interface Section9ThermalBundle {
+  generatedAt: string;
+  mission: string;
+  instrument: string;
+  pdsDataSetId: string;
+  sourceUrl: string;
+  regions: Record<string, Section9ThermalRegion>;
+}
+
+export interface BaseCertificationRegionBundle {
+  regionId: string;
+  regionKey: string;
+  body: 'moon' | 'mars';
+  grid: { rows: number; cols: number; cellSizeMeters: number };
+  stats: {
+    radiationMsvYr: { min: number; max: number; mean: number; std: number };
+    skyViewSteradians: { min: number; max: number; mean: number; std: number };
+    waterIceWehPct: { min: number; max: number; mean: number; std: number };
+    illuminationPct: { min: number; max: number; mean: number; std: number };
+    dteCommsPct: { min: number; max: number; mean: number; std: number };
+    rockAbundancePct: { min: number; max: number; mean: number; std: number };
+    bearingCapacityKpa: { min: number; max: number; mean: number; std: number };
+  };
+  rasters: {
+    radiationMsvYr: number[];
+    skyViewSteradians: number[];
+    waterIceWehPct: number[];
+    illuminationPct: number[];
+    dteCommsPct: number[];
+    rockAbundancePct: number[];
+    bearingCapacityKpa: number[];
+  };
+}
+
+export interface BaseCertificationDataset {
+  generatedAt: string;
+  version: string;
+  criteriaResolved: {
+    id: string;
+    title: string;
+    status: string;
+    datasets: string[];
+    summary: string;
+  }[];
+  regions: Record<string, BaseCertificationRegionBundle>;
+}
+
+
+export async function loadModisLstDataset(): Promise<ModisLstDataset> {
+  if (cachedModis) return cachedModis;
+  const res = await fetch('/data/terrains/modis-mod11a2-lst.json');
+  if (!res.ok) throw new Error(`HTTP ${res.status} loading MODIS MOD11A2 dataset`);
+  cachedModis = (await res.json()) as ModisLstDataset;
+  return cachedModis;
+}
+
+export async function loadDivinerPcpDataset(): Promise<DivinerPcpDataset> {
+  if (cachedDiviner) return cachedDiviner;
+  const res = await fetch('/data/terrains/diviner-pcp-southpole.json');
+  if (!res.ok) throw new Error(`HTTP ${res.status} loading Diviner PCP dataset`);
+  cachedDiviner = (await res.json()) as DivinerPcpDataset;
+  return cachedDiviner;
+}
+
+// Archive bundles contain unvalidated models. Keep them out of the measurement path.
+export async function loadMoonGlobalThermalDataset(): Promise<Section9ThermalBundle | null> {
+  return null;
+}
+
+export async function loadMarsTesThermalDataset(): Promise<Section9ThermalBundle | null> {
+  return null;
+}
+
+export async function loadBaseCertificationDataset(): Promise<BaseCertificationDataset | null> {
+  return null;
+}
 
 const cache = new Map<string, TerrainGridDataset>();
 

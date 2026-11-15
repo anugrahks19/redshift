@@ -1,0 +1,54 @@
+{
+  "id": "earth-lava-beds-glo30",
+  "siteId": "lava-beds",
+  "planet": "Earth",
+  "siteName": "Lava Beds, California",
+  "crs": "EPSG:32610 (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      622191,
+      4617511,
+      626031,
+      4621351
+    ],
+    "geographic": [
+      -121.53147,
+      41.69941,
+      -121.48452999999999,
+      41.73458
+    ],
+    "center": {
+      "lat": 41.717,
+      "lon": -121.508,
+      "label": "41.717°, -121.508°"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 1333.35,
+    "maxElevation": 1668.75,
+    "reliefMeters": 335.4
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30",
+    "provider": "ESA / Copernicus Open Data Registry",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N41_00_W122_00_DEM/Copernicus_DSM_COG_10_N41_00_W122_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N41_00_W122_00_DEM/Copernicus_DSM_COG_10_N41_00_W122_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_N41_00_W122_00_DEM",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_N41_00_W122_00_DEM and bilinearly resampled onto 30.0 m EPSG:32610 grid. NASADEM coverage check: Copernicus surface model. Vegetation and structures may affect heights..",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "Copernicus surface model. Vegetation and structures may affect heights."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}
