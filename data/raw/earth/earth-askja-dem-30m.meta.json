@@ -1,0 +1,54 @@
+{
+  "id": "earth-askja-dem-30m",
+  "siteId": "iceland-askja",
+  "planet": "Earth",
+  "siteName": "Askja & Holuhraun Volcanic Highlands, Iceland (Copernicus GLO-30 High-Latitude Supplement)",
+  "crs": "EPSG:32628 (UTM Zone 28N) (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      415657,
+      7211019,
+      419497,
+      7214859
+    ],
+    "geographic": [
+      -16.79189,
+      65.0123,
+      -16.70815,
+      65.04769
+    ],
+    "center": {
+      "lat": 65.03,
+      "lon": -16.75,
+      "label": "65°01'48\"N, 16°45'00\"W"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 1055.5,
+    "maxElevation": 1482.71,
+    "reliefMeters": 427.21
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30 (High-Latitude Supplement for NASADEM >60°N / <56°S cutoff)",
+    "provider": "ESA / Copernicus Open Data Registry (NASADEM latitude limit supplement)",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N65_00_W017_00_DEM/Copernicus_DSM_COG_10_N65_00_W017_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N65_00_W017_00_DEM/Copernicus_DSM_COG_10_N65_00_W017_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_N65_00_W017_00_DEM (NASADEM out-of-bounds north of 60°N)",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_N65_00_W017_00_DEM (NASADEM out-of-bounds north of 60°N) and bilinearly resampled onto 30.0 m EPSG:32628 (UTM Zone 28N) grid. NASADEM coverage check: OUT_OF_BOUNDS (NASADEM_HGT V001 ends at 60°N due to SRTM shuttle inclination; supplemented by real 30 m Copernicus GLO-30 tile N65W017).",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "OUT_OF_BOUNDS (NASADEM_HGT V001 ends at 60°N due to SRTM shuttle inclination; supplemented by real 30 m Copernicus GLO-30 tile N65W017)"
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

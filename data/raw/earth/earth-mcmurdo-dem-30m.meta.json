@@ -1,0 +1,54 @@
+{
+  "id": "earth-mcmurdo-dem-30m",
+  "siteId": "mcmurdo-dry-valleys",
+  "planet": "Earth",
+  "siteName": "McMurdo Dry Valleys (Wright Valley), Antarctica (Copernicus GLO-30 Polar Supplement)",
+  "crs": "EPSG:32757 (UTM Zone 57S) (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      562316,
+      1388468,
+      566156,
+      1392308
+    ],
+    "geographic": [
+      161.58677,
+      -77.56796,
+      161.75342,
+      -77.53202
+    ],
+    "center": {
+      "lat": -77.55,
+      "lon": 161.67,
+      "label": "77°33'00\"S, 161°40'12\"E"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 89.79,
+    "maxElevation": 1354.25,
+    "reliefMeters": 1264.46
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30 (High-Latitude Supplement for NASADEM >60°N / <56°S cutoff)",
+    "provider": "ESA / Copernicus Open Data Registry (NASADEM latitude limit supplement)",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_S78_00_E161_00_DEM/Copernicus_DSM_COG_10_S78_00_E161_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_S78_00_E161_00_DEM/Copernicus_DSM_COG_10_S78_00_E161_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_S78_00_E161_00_DEM (NASADEM out-of-bounds south of 56°S)",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_S78_00_E161_00_DEM (NASADEM out-of-bounds south of 56°S) and bilinearly resampled onto 30.0 m EPSG:32757 (UTM Zone 57S) grid. NASADEM coverage check: OUT_OF_BOUNDS (NASADEM_HGT V001 ends at 56°S due to SRTM shuttle inclination; supplemented by real 30 m Copernicus GLO-30 tile S78E161).",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "OUT_OF_BOUNDS (NASADEM_HGT V001 ends at 56°S due to SRTM shuttle inclination; supplemented by real 30 m Copernicus GLO-30 tile S78E161)"
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "earth-kilauea-glo30",
+  "siteId": "kilauea",
+  "planet": "Earth",
+  "siteName": "Kīlauea Iki, Hawaiʻi",
+  "crs": "EPSG:32605 (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      262232,
+      2146254,
+      266072,
+      2150094
+    ],
+    "geographic": [
+      -155.26451999999998,
+      19.39644,
+      -155.22749,
+      19.43157
+    ],
+    "center": {
+      "lat": 19.414,
+      "lon": -155.246,
+      "label": "19.414°, -155.246°"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 1063.26,
+    "maxElevation": 1224.42,
+    "reliefMeters": 161.16
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30",
+    "provider": "ESA / Copernicus Open Data Registry",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N19_00_W156_00_DEM/Copernicus_DSM_COG_10_N19_00_W156_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N19_00_W156_00_DEM/Copernicus_DSM_COG_10_N19_00_W156_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_N19_00_W156_00_DEM",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_N19_00_W156_00_DEM and bilinearly resampled onto 30.0 m EPSG:32605 grid. NASADEM coverage check: Copernicus surface model. Vegetation and structures may affect heights..",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "Copernicus surface model. Vegetation and structures may affect heights."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "earth-mauna-kea-nasadem-30m",
+  "siteId": "mauna-kea-apollo",
+  "planet": "Earth",
+  "siteName": "Mauna Kea Apollo Valley Slope, Hawaii, USA (NASADEM_HGT V001)",
+  "crs": "EPSG:32605 (UTM Zone 5N) (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM96 geoid orthometric height (NASADEM_HGT V001)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      239351,
+      2191534,
+      243191,
+      2195374
+    ],
+    "geographic": [
+      -155.48857999999998,
+      19.80241,
+      -155.45141,
+      19.837580000000003
+    ],
+    "center": {
+      "lat": 19.82,
+      "lon": -155.47,
+      "label": "19°49'12\"N, 155°28'12\"W"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 3698.03,
+    "maxElevation": 4208.52,
+    "reliefMeters": 510.49
+  },
+  "provenance": {
+    "datasetName": "NASADEM Merged DEM Global 1 arc second V001 (NASADEM_HGT)",
+    "provider": "NASA JPL / LP DAAC (C2763264762-LPCLOUD)",
+    "instrumentOrMission": "Shuttle Radar Topography Mission (SRTM) + ASTER GDEM v3 + ICESat GLAS",
+    "originalUrl": "https://search.earthdata.nasa.gov/search/granules?p=C2763264762-LPCLOUD",
+    "cogUrl": "https://nasademeuwest.blob.core.windows.net/nasadem-cog/v001/NASADEM_HGT_n19w156.tif",
+    "productId": "NASADEM_HGT_n19w156 (V001)",
+    "acquisitionRange": "2000-02-11 to 2000-02-22 (V001 2020)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from NASADEM_HGT_n19w156 (V001) and bilinearly resampled onto 30.0 m EPSG:32605 (UTM Zone 5N) grid. NASADEM coverage check: COVERED (Within 60°N–56°S SRTM/NASADEM orbital bounds).",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "COVERED (Within 60°N–56°S SRTM/NASADEM orbital bounds)"
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

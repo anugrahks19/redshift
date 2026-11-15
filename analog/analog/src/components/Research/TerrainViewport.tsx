@@ -64,6 +64,7 @@ interface TerrainMeshProps {
   dataset: TerrainGridDataset;
   derived: DerivedTerrainGrid;
   activeLayer: SpatialLayerId;
+  heatmapOpacity?: number;
   exaggeration: number;
   reliefSpanOverride?: number | null;
   hillshade?: boolean;
@@ -81,6 +82,7 @@ const TerrainMesh: React.FC<TerrainMeshProps> = ({
   dataset,
   derived,
   activeLayer,
+  heatmapOpacity = 1.0,
   exaggeration,
   reliefSpanOverride = null,
   hillshade = true,
@@ -128,6 +130,7 @@ const TerrainMesh: React.FC<TerrainMeshProps> = ({
       dataset,
       derived,
       activeLayer,
+      heatmapOpacity,
       differenceGrid,
       showDifferenceOverlay,
       reliefSpanOverride,
@@ -150,6 +153,7 @@ const TerrainMesh: React.FC<TerrainMeshProps> = ({
     dataset,
     derived,
     activeLayer,
+    heatmapOpacity,
     differenceGrid,
     showDifferenceOverlay,
     reliefSpanOverride,
@@ -479,6 +483,7 @@ interface TerrainViewportProps {
   loading: boolean;
   error: string | null;
   activeLayer: SpatialLayerId;
+  heatmapOpacity?: number;
   exaggeration: number;
   onExaggerationChange: (v: number) => void;
   reliefSpanOverride?: number | null;
@@ -506,6 +511,7 @@ export const TerrainViewport: React.FC<TerrainViewportProps> = ({
   loading,
   error,
   activeLayer,
+  heatmapOpacity = 1.0,
   exaggeration,
   onExaggerationChange,
   reliefSpanOverride = null,
@@ -592,9 +598,33 @@ export const TerrainViewport: React.FC<TerrainViewportProps> = ({
     if (activeLayer === 'roughness') {
       return {
         title: 'Roughness (TRI 3×3)',
-        minLabel: '0 m',
-        maxLabel: '12+ m',
+        minLabel: '0 m (Smooth)',
+        maxLabel: '12+ m (Rugged)',
         gradient: 'linear-gradient(90deg, #1E3A52, #327F79, #C28B38, #ECE0C6)',
+      };
+    }
+    if (activeLayer === 'temperature') {
+      if (derived.temperatureAvailable && derived.temperatureStatsCelsius) {
+        return {
+          title: `Heatmap 4 · ${derived.temperatureDatasetLabel ?? 'Surface Temperature'}`,
+          minLabel: `${derived.temperatureStatsCelsius.min.toFixed(1)} °C (${(derived.temperatureStatsCelsius.min + 273.15).toFixed(1)} K)`,
+          maxLabel: `${derived.temperatureStatsCelsius.max.toFixed(1)} °C (${(derived.temperatureStatsCelsius.max + 273.15).toFixed(1)} K)`,
+          gradient: 'linear-gradient(90deg, #1C2574, #2B72B5, #44A898, #E0A83E, #D04830)',
+        };
+      }
+      return {
+        title: 'Heatmap 4 · Surface Temperature Unavailable',
+        minLabel: 'Elevation-Only Dataset',
+        maxLabel: 'Zero Fabricated Values',
+        gradient: 'linear-gradient(90deg, #546170, #546170)',
+      };
+    }
+    if (activeLayer === 'similarity') {
+      return {
+        title: 'Heatmap 5 · Exploratory Analog Similarity Index',
+        minLabel: `0% (Min ${derived.similarityStats?.min.toFixed(0) ?? 0}%)`,
+        maxLabel: `100% (Max ${derived.similarityStats?.max.toFixed(0) ?? 100}%)`,
+        gradient: 'linear-gradient(90deg, #26344A, #2E708E, #349E80, #D8B248)',
       };
     }
     if (activeLayer === 'coverage') {
@@ -761,6 +791,7 @@ export const TerrainViewport: React.FC<TerrainViewportProps> = ({
                 dataset={dataset}
                 derived={derived}
                 activeLayer={activeLayer}
+                heatmapOpacity={heatmapOpacity}
                 exaggeration={exaggeration}
                 reliefSpanOverride={reliefSpanOverride}
                 hillshade={hillshade}
@@ -782,6 +813,35 @@ export const TerrainViewport: React.FC<TerrainViewportProps> = ({
               />
             </Canvas>
           </ViewportErrorBoundary>
+        )}
+
+        {/* Temperature Unavailable Scientific Integrity Notice */}
+        {activeLayer === 'temperature' && derived && !derived.temperatureAvailable && !loading && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 12,
+              left: 12,
+              right: 12,
+              zIndex: 6,
+              background: 'rgba(18, 28, 40, 0.92)',
+              border: '1px solid rgba(245, 158, 11, 0.55)',
+              borderRadius: 6,
+              padding: '8px 12px',
+              color: '#FDE68A',
+              fontSize: 11.5,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            <AlertTriangle size={15} color="#F59E0B" style={{ flexShrink: 0 }} />
+            <span>
+              <strong>Temperature Raster Unavailable for {dataset?.shortName}:</strong>{' '}
+              {derived.temperatureUnavailableReason ??
+                'This dataset contains topographic elevation only and has no thermal infrared band. Temperature values are never fabricated from elevation.'}
+            </span>
+          </div>
         )}
 
         {/* Scale Bar & North Arrow */}
@@ -813,7 +873,7 @@ export const TerrainViewport: React.FC<TerrainViewportProps> = ({
                 <div>
                   <div style={{ width: 64, height: 3, background: '#F7F8F6', marginBottom: 2 }} />
                   <span className="mono" style={{ fontSize: 10, color: '#9FB0C1' }}>
-                    3.84 km tile · 30 m grid
+                    {(dataset.extentMeters[0] / 1000).toFixed(2)} km tile · {dataset.cellSizeMeters} m grid
                   </span>
                 </div>
               </div>

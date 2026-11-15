@@ -1,0 +1,111 @@
+{
+  "body": "Earth",
+  "classification": "Terrestrial Planet (Reference Baseline)",
+  "dataOriginNotice": "Published planetary reference values from NASA NSSDCA Earth Fact Sheet. Distinct from local NASADEM elevation and MODIS MOD11A2 land surface temperature raster measurements.",
+  "gravity_m_s2": 9.80665,
+  "gravityRelativeToEarth": 1.0,
+  "surfacePressure_mbar": 1013.25,
+  "pressureCategory": "Standard breathable sea-level atmospheric pressure (101.325 kPa)",
+  "atmosphereComposition": [
+    {
+      "gas": "Nitrogen (N₂)",
+      "percent": 78.08
+    },
+    {
+      "gas": "Oxygen (O₂)",
+      "percent": 20.95
+    },
+    {
+      "gas": "Argon (Ar)",
+      "percent": 0.93
+    },
+    {
+      "gas": "Carbon Dioxide (CO₂)",
+      "percent": 0.042
+    }
+  ],
+  "oxygenPercent": 20.95,
+  "breathableByHumans": true,
+  "referenceTemperatureCelsius": {
+    "globalMean": 15,
+    "atacamaMeasuredModisDayMean": 36.68,
+    "atacamaMeasuredModisNightMean": 11.28,
+    "mcmurdoMeasuredModisMean": -32.23
+  },
+  "radiationEnvironment": "Protected by geomagnetic magnetosphere and ~1,033 g/cm² atmospheric column (~2.4 mSv/yr natural background).",
+  "humanSafetyWarnings": [
+    "Extreme hyper-arid UV flux and dehydration hazard in Atacama Desert field analogs.",
+    "Catabatic winds and severe hypothermia hazard in McMurdo Dry Valleys (-15 °C to -50 °C)."
+  ],
+  "sourceCitation": "NASA NSSDCA Earth Fact Sheet (Williams, 2024) + Local MODIS MOD11A2 v061 & NASADEM V001.",
+  "missingPermanentBaseCriteria": [
+    {
+      "criterion": "Atmospheric Composition & In-Situ Breathability",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "MSL-M-SAM-5-RDR-L2-V1.0",
+        "MSL-M-REMS-2-EDR-V1.0",
+        "LRO-LADEE-EXOSPHERE"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Ionizing Radiation & Solar Particle Event (SPE) Dosimetry",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LOLA-4-GDR-V1.0 (SKYV_65S_240M.IMG)",
+        "LRO-CRaTER-L2",
+        "MSL-M-RAD-2-EDR-V1.0"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Bulk Subsurface Water/Ice Concentration & Purity",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LEND-4/5-RDR-V1.0 (LEND_RDR_DLD)",
+        "LRO-L-LOLA-4-GDR-V1.0 (LPSR_85S_060M)",
+        "MSL-M-DAN-3/4-RDR-V1.0 (SOL0003/SOL0021)"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Continuous Solar Illumination Horizon & Eclipse Duration",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LOLA-4-GDR-V1.0 (AVGVISIB_85S_060M_201608.IMG)"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Direct-to-Earth (DTE) & Relay Communications Visibility",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-LOLA-4-GDR-V1.0 (AVGVISIB_85S_060M_201608_EARTH.IMG)",
+        "NASA-DSN-MRO-TGO-RELAY"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    },
+    {
+      "criterion": "Geotechnical Bearing Capacity & Regolith Mechanics",
+      "providedByFiveDatasets": false,
+      "providedBySection9Datasets": false,
+      "status": "SITE EVIDENCE UNAVAILABLE",
+      "pdsDatasets": [
+        "LRO-L-DLRE-5-GDR-V1.0 (DGDR_RA_AVG_CYL)",
+        "MGS-M-TES-5-TIMAP-V1.0 (GLOBAL_TI_NIGHT_2007)"
+      ],
+      "explanation": "Site-specific evidence or a validated engineering assessment is required."
+    }
+  ]
+}

@@ -110,7 +110,13 @@ export interface PlanetaryRegionTarget {
   volatileSummary: string;
   illuminationSummary: string;
   hasLocalDem: boolean;
-  terrainDatasetId?: 'mars-gale-murray-30m' | 'mars-gale-bradbury-30m';
+  terrainDatasetId?:
+    | 'mars-gale-murray-30m'
+    | 'mars-gale-bradbury-30m'
+    | 'mars-jezero-mola-megdr'
+    | 'moon-shackleton-lola'
+    | 'moon-marius-lola'
+    | 'moon-tranquillitatis-lola';
   imageUrl?: string;
   scientificFocus: string;
   recommendedEarthSiteIds: string[];

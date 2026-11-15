@@ -3,16 +3,24 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+// @ts-expect-error - shared Node ESM middleware
+import { createScientificApiMiddleware } from '../scripts/scientific-api-middleware.mjs'
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 function analogSubappMiddleware(): Plugin {
   const analogHtml = path.join(rootDir, 'public', 'analog', 'index.html')
+  const apiHandler = createScientificApiMiddleware()
 
-  const register = (middlewares: { use: (fn: (req: { url?: string }, res: { statusCode: number; setHeader: (k: string, v: string) => void; end: (b?: string | Buffer) => void }, next: () => void) => void) => void }) => {
+  const register = (middlewares: { use: (fn: (req: { url?: string; method?: string; on?: (ev: string, cb: (c?: unknown) => void) => void }, res: { statusCode: number; setHeader: (k: string, v: string) => void; end: (b?: string | Buffer) => void }, next: () => void) => void) => void }) => {
     middlewares.use((req, res, next) => {
       const rawUrl = req.url ?? '/'
       const pathname = rawUrl.split('?')[0]
+
+      if (pathname.startsWith('/api/')) {
+        void apiHandler(req, res, next)
+        return
+      }
 
       if (pathname === '/analog') {
         res.statusCode = 302

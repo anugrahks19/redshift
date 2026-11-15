@@ -24,6 +24,7 @@ interface DualTerrainStudioProps {
   marsError: string | null;
   activeLayer: SpatialLayerId;
   onActiveLayerChange: (layer: SpatialLayerId) => void;
+  heatmapOpacity?: number;
   comparisonMode: ComparisonMode;
   onComparisonModeChange: (mode: ComparisonMode) => void;
   linkedCamera: boolean;
@@ -61,6 +62,7 @@ export const DualTerrainStudio: React.FC<DualTerrainStudioProps> = ({
   marsError,
   activeLayer,
   onActiveLayerChange,
+  heatmapOpacity = 1.0,
   comparisonMode,
   onComparisonModeChange,
   linkedCamera,
@@ -226,6 +228,7 @@ export const DualTerrainStudio: React.FC<DualTerrainStudioProps> = ({
           loading={earthLoading}
           error={earthError}
           activeLayer={activeLayer}
+          heatmapOpacity={heatmapOpacity}
           exaggeration={effectiveEarthExag}
           onExaggerationChange={handleEarthExagChange}
           reliefSpanOverride={sharedReliefSpan}
@@ -253,6 +256,7 @@ export const DualTerrainStudio: React.FC<DualTerrainStudioProps> = ({
           loading={marsLoading}
           error={marsError}
           activeLayer={activeLayer}
+          heatmapOpacity={heatmapOpacity}
           exaggeration={effectiveMarsExag}
           onExaggerationChange={handleMarsExagChange}
           reliefSpanOverride={sharedReliefSpan}

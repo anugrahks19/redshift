@@ -1,0 +1,54 @@
+{
+  "id": "mars-jezero-mola-megdr",
+  "siteId": "jezero-delta",
+  "planet": "Mars",
+  "siteName": "Jezero Crater & Western Isidis Margin (MGS MOLA MEGDR 16 ppd)",
+  "crs": "IAU2000 Mars Simple Cylindrical (Planetocentric)",
+  "nativeCrs": "SIMPLE CYLINDRICAL 16 pix/deg (MGS-M-MOLA-5-MEGDR-L3-V1.0)",
+  "verticalDatum": "Mars Areoid (Goddard Mars Potential Model GMM3 / mgm1025)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 3705,
+  "bounds": {
+    "projected": [
+      0,
+      0,
+      474240,
+      474240
+    ],
+    "geographic": [
+      73.563,
+      14.375,
+      81.563,
+      22.375
+    ],
+    "center": {
+      "lat": 18.38,
+      "lon": 77.58,
+      "label": "18.38°N, 77.58°E (Jezero Crater)"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": -4651,
+    "maxElevation": 1515,
+    "reliefMeters": 6166
+  },
+  "provenance": {
+    "datasetName": "MGS MOLA Mission Experiment Gridded Data Record (MEGDR 16 ppd)",
+    "provider": "NASA GSFC / PDS Geosciences Node (Smith et al., 2003)",
+    "instrumentOrMission": "Mars Global Surveyor (MGS) — Mars Orbiter Laser Altimeter (MOLA)",
+    "originalUrl": "https://pds-geosciences.wustl.edu/missions/mgs/megdr.html",
+    "cogUrl": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg016/megt90n000eb.img",
+    "productId": "MEGT90N000EB.IMG (MGS-M-MOLA-5-MEGDR-L3-V1.0)",
+    "acquisitionRange": "1997-09-15 to 2001-06-30 (MGS Orbits 3 to 20333)",
+    "processingPerformed": "Direct 128×128 binary subset extracted via HTTP Range read from MEGT90N000EB.IMG (16-bit MSB signed integer elevation relative to GMM3 Mars Areoid; lbl: https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg016/megt90n000eb.lbl).",
+    "resamplingMethod": "Native 16 pixels/degree (3,705 m/pix) cylindrical grid",
+    "limitations": "16 pixels/degree (~3.7 km/pix) resolves Jezero crater rim, basin floor, and Nili Fossae trough but not sub-100 m delta foreset scarps."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}

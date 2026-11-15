@@ -1,0 +1,54 @@
+{
+  "id": "earth-lanzarote-timanfaya-glo30",
+  "siteId": "lanzarote-timanfaya",
+  "planet": "Earth",
+  "siteName": "Timanfaya, Lanzarote",
+  "crs": "EPSG:32628 (resampled from native EPSG:4326)",
+  "nativeCrs": "EPSG:4326 (WGS 84)",
+  "verticalDatum": "EGM2008 orthometric height (Copernicus GLO-30)",
+  "units": "meters",
+  "gridWidth": 128,
+  "gridHeight": 128,
+  "cellSizeMeters": 30,
+  "bounds": {
+    "projected": [
+      619817,
+      3208372,
+      623657,
+      3212212
+    ],
+    "geographic": [
+      -13.76992,
+      28.997490000000003,
+      -13.73008,
+      29.03251
+    ],
+    "center": {
+      "lat": 29.015,
+      "lon": -13.75,
+      "label": "29.015°, -13.75°"
+    }
+  },
+  "stats": {
+    "validCells": 16384,
+    "totalCells": 16384,
+    "coveragePercent": 100,
+    "minElevation": 141.22,
+    "maxElevation": 489.25,
+    "reliefMeters": 348.03
+  },
+  "provenance": {
+    "datasetName": "Copernicus DEM GLO-30",
+    "provider": "ESA / Copernicus Open Data Registry",
+    "instrumentOrMission": "TanDEM-X / WorldDEM SAR Interferometry",
+    "originalUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N29_00_W014_00_DEM/Copernicus_DSM_COG_10_N29_00_W014_00_DEM.tif",
+    "cogUrl": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N29_00_W014_00_DEM/Copernicus_DSM_COG_10_N29_00_W014_00_DEM.tif",
+    "productId": "Copernicus_DSM_COG_10_N29_00_W014_00_DEM",
+    "acquisitionRange": "2011–2015 (GLO-30 release)",
+    "processingPerformed": "Extracted 3840 m × 3840 m window via HTTP Range read from Copernicus_DSM_COG_10_N29_00_W014_00_DEM and bilinearly resampled onto 30.0 m EPSG:32628 grid. NASADEM coverage check: Copernicus surface model. Vegetation and structures may affect heights..",
+    "resamplingMethod": "Bilinear interpolation onto 30.0 m metric grid",
+    "limitations": "Copernicus surface model. Vegetation and structures may affect heights."
+  },
+  "ingestionStatus": "INGESTED_AND_VALIDATED",
+  "processingStatus": "DERIVED_PRODUCTS_GENERATED"
+}
