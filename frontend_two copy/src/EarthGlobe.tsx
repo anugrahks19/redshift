@@ -211,13 +211,14 @@ export default function EarthGlobe({ onReady }: EarthGlobeProps) {
         powerPreference: 'high-performance',
       })
     } catch {
-      onReadyRef.current?.()
       return
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
     renderer.setClearColor(0x000000, 0)
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.06
+    renderer.domElement.style.opacity = '0'
+    renderer.domElement.style.transition = 'opacity 0.6s ease'
     mount.appendChild(renderer.domElement)
 
     const maxAniso = Math.min(8, renderer.capabilities.getMaxAnisotropy())
@@ -245,6 +246,9 @@ export default function EarthGlobe({ onReady }: EarthGlobeProps) {
     let cloudMesh: THREE.Mesh | null = null
     let earthMat: THREE.ShaderMaterial | null = null
     let cloudMat: THREE.ShaderMaterial | null = null
+    let globeVisible = false
+    let validationFrames = 0
+    const centerPixel = new Uint8Array(4)
     const disposableGeometries: THREE.BufferGeometry[] = [atmoGeo]
     const disposableMaterials: THREE.Material[] = [atmoMat]
     const disposableTextures: THREE.Texture[] = []
@@ -334,10 +338,8 @@ export default function EarthGlobe({ onReady }: EarthGlobeProps) {
       tiltGroup.add(cloudMesh)
 
       disposableMaterials.push(earthMat, cloudMat)
-      onReadyRef.current?.()
     }, undefined, () => {
-      // Keep fallback earth-photo visible cleanly if Earth.glb fails or times out over a proxy tunnel
-      if (!disposed) onReadyRef.current?.()
+      // Leave the Earth photograph visible if the model cannot load.
     })
 
     const resize = () => {
@@ -359,6 +361,15 @@ export default function EarthGlobe({ onReady }: EarthGlobeProps) {
         earthMat.uniforms.uCloudOffset.value = (spin * 0.15) / (Math.PI * 2)
       }
       renderer.render(scene, camera)
+      if (earthMesh && !globeVisible && validationFrames++ < 12) {
+        const gl = renderer.getContext()
+        gl.readPixels(renderer.domElement.width >> 1, renderer.domElement.height >> 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, centerPixel)
+        if (centerPixel[0] + centerPixel[1] + centerPixel[2] > 16) {
+          globeVisible = true
+          renderer.domElement.style.opacity = '1'
+          onReadyRef.current?.()
+        }
+      }
     })
 
     return () => {
